@@ -10,10 +10,16 @@
   var all = function (v) { var o = {}; DAY.forEach(function (d) { o[d] = v; }); return o; };
   var PLACES = {
     utila: [
-      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', pal: 'josies-cafe', x: 740, y: 415, real: true, blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
+      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', pal: 'josies-cafe', x: 270, y: 425, real: true, blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
         hours: { mon: '6:15-14:30', tue: '6:15-14:30', wed: '6:15-14:30', thu: '6:15-14:30', fri: '6:15-14:30', sat: '6:15-14:30', sun: 'closed' } },
-      { id: 'utila-dives', name: 'Utila Dives', kind: 'Do', pal: 'utila-dives', x: 270, y: 430, blurb: 'Fun dives, first-time dives and courses off their own dock.',
-        hours: (function () { var o = all('7:00-17:00'); o.sun = '7:00-12:00'; return o; })() }
+      { id: 'paradise', name: 'Paradise', kind: 'Dive \u00b7 Stay', pal: 'paradise', x: 740, y: 425, real: true, blurb: 'SSI and PADI dive shop and hostel on the bay, next to Josie\u2019s.',
+        hours: (function () { var o = all('7:00-17:00'); o.sun = '7:00-12:00'; return o; })(),
+        /* from Paradise's place card (utilatarian/places/paradise/place_card.json): courses, agencies, and the card each one needs */
+        offers: [
+          { name: 'Try scuba', agencies: ['SSI', 'PADI'], needs: 'none' }, { name: 'Open Water', agencies: ['SSI', 'PADI'], needs: 'none', days: 4 },
+          { name: 'Advanced Open Water', agencies: ['SSI', 'PADI'], needs: 'ow', days: 2 }, { name: 'Rescue Diver', agencies: ['SSI', 'PADI'], needs: 'aow', days: 3 },
+          { name: 'Fun dives', agencies: ['any'], needs: 'ow' }, { name: 'Night dive', agencies: ['any'], needs: 'ow' }
+        ] }
     ]
   };
   var byId = {}; Object.keys(PLACES).forEach(function (a) { PLACES[a].forEach(function (p) { p.area = a; byId[p.id] = p; }); });
@@ -21,6 +27,20 @@
   /* plan: [{id, day, block}], kept on the device */
   var plan = []; try { plan = JSON.parse(localStorage.getItem('tw-plan') || '[]'); } catch (e) { plan = []; }
   var day = 'sat', showDays = false;
+  /* the diver's card: a level on the shared ladder and the agency that issued it (SSI and PADI cards are both accepted for diving) */
+  var LADDER = ['none', 'ow', 'aow', 'rescue', 'pro'], LN = { none: 'No card', ow: 'Open Water', aow: 'Advanced', rescue: 'Rescue', pro: 'Divemaster+' };
+  var cert = { level: 'none', agency: 'SSI' }; try { cert = JSON.parse(localStorage.getItem('tw-cert')) || cert; } catch (e) { }
+  function saveCert() { try { localStorage.setItem('tw-cert', JSON.stringify(cert)); } catch (e) { } }
+  function certBlock(p) {
+    if (!p.offers) { return ''; }
+    return '<p class="where" style="margin:12px 0 2px"><b>Your card</b></p><div class="days">' + LADDER.map(function (l) { return '<button data-cert="' + l + '" class="' + (cert.level === l ? 'on' : '') + '">' + LN[l] + '</button>'; }).join('') + '</div>' +
+      (cert.level === 'none' ? '' : '<div class="days">' + ['SSI', 'PADI', 'Other'].map(function (g) { return '<button data-agency="' + g + '" class="' + (cert.agency === g ? 'on' : '') + '">' + g + '</button>'; }).join('') + '</div>') +
+      p.offers.map(function (o) {
+        var ok = LADDER.indexOf(cert.level) >= LADDER.indexOf(o.needs), done = o.needs === 'none' && o.name === 'Open Water' && LADDER.indexOf(cert.level) >= 1;
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)"><span><b>' + o.name + '</b>' + (o.days ? ' <span class="where">\u00b7 ' + o.days + ' days</span>' : '') + (o.agencies[0] !== 'any' ? ' <span class="where">\u00b7 ' + o.agencies.join(' or ') + '</span>' : '') + '</span>' +
+          '<span class="chip ' + (done ? 'off' : ok ? 'ok' : 'soon') + '">' + (done ? 'have it' : ok ? 'ready' : 'needs ' + LN[o.needs]) + '</span></div>';
+      }).join('');
+  }
   function save() { try { localStorage.setItem('tw-plan', JSON.stringify(plan)); } catch (e) { } $('pn').textContent = plan.length; }
   function mins(s) { var a = s.split(':'); return +a[0] * 60 + +a[1]; }
   function clock(s) { var a = s.split(':'), h = +a[0]; return (h % 12 || 12) + (a[1] === '00' ? '' : ':' + a[1]) + (h >= 12 ? 'pm' : 'am'); }
@@ -66,14 +86,16 @@
         return ok ? '<button class="btn add' + (on ? ' done' : '') + '" data-add="' + b + '">' + (on ? '✓ ' : '+ ') + BLOCK[b][0] + '</button>' : '<span class="chip off" style="margin-right:6px">' + BLOCK[b][0] + '</span>';
       }).join('');
       return '<p class="where" style="margin:10px 0 2px"><b>' + DAYL[day] + '</b> · ' + (today === 'closed' ? 'closed' : clock(today.split('-')[0]) + ' – ' + clock(today.split('-')[1])) + ' <button class="pillbtn" data-showdays="1" style="min-height:32px;padding:0 12px;font-size:13px">change day</button></p>' +
-        (showDays ? '<div class="days">' + DAY.map(function (d) { return '<button data-day="' + d + '" class="' + (d === day ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' : '') + rows;
+        (showDays ? '<div class="days">' + DAY.map(function (d) { return '<button data-day="' + d + '" class="' + (d === day ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' : '') + rows + certBlock(p);
     }
     var h = '<div data-place="' + p.pal + '" class="pcard" id="pc"><b style="font-family:var(--u-display);font-size:20px">' + p.kind + ' · ' + p.name + '</b><p style="margin:4px 0 0;color:var(--ink2)">' + p.blurb + '</p><div id="pcb">' + body() + '</div></div>';
-    openSheet(p.name, p.real ? 'On the map, in its own colors.' : 'Sample place, in its own colors.', h);
+    openSheet(p.name, p.offers ? 'Courses and dives match your card, SSI or PADI.' : 'On the map, in its own colors.', h);
     $('pc').onclick = function (e) {
       var t = e.target, d = t.getAttribute('data-day'), b = t.getAttribute('data-add'), i;
       if (t.getAttribute('data-showdays')) { showDays = !showDays; $('pcb').innerHTML = body(); }
       if (d) { day = d; showDays = false; $('pcb').innerHTML = body(); }
+      if (t.getAttribute('data-cert')) { cert.level = t.getAttribute('data-cert'); saveCert(); $('pcb').innerHTML = body(); }
+      if (t.getAttribute('data-agency')) { cert.agency = t.getAttribute('data-agency'); saveCert(); $('pcb').innerHTML = body(); }
       if (b) { if (has(p.id, day, b)) { plan = plan.filter(function (x) { return !(x.id === p.id && x.day === day && x.block === b); }); } else { plan.push({ id: p.id, day: day, block: b }); } save(); $('pcb').innerHTML = body(); }
     };
   }

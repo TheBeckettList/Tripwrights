@@ -76,9 +76,10 @@
     /* small houses along the north shore, the town */
     [[330, 178], [392, 152], [560, 152], [622, 178], [700, 198], [236, 214]].forEach(function (c, j) { h += at(c[0], c[1], j * 7 - 12, 1, '<rect x="-22" y="-16" width="44" height="32" rx="5" fill="#FFFFFF"/><rect x="-24" y="-16" width="48" height="13" fill="' + ['#F5B5C8', '#F2A66B', '#EAD9C5'][j % 3] + '"/>'); });
     /* the places, drawn as their own simplified selves, each on the bay shore with its own pier or dock */
-    var D = byId['utila-dives'], J = byId['josies-cafe'];
-    if (D) { h += obj('place:utila-dives', D.name, D.name + ': plan this stop', [D.x - 190, D.y - 90, 350, 250], at(D.x, D.y, 0, .62, P.placeDives()), D.x - 10, D.y + 150); }
-    if (J) { h += obj('place:josies-cafe', J.name, J.name + ': plan this stop', [J.x - 150, J.y - 90, 330, 250], at(J.x, J.y, 0, .62, P.placeJosies()), J.x + 10, J.y + 150); }
+    /* Josie's on the west shore, Paradise right next door to the east (as in Paradise's sketch); both face the bay */
+    var D = byId.paradise, J = byId['josies-cafe'], flip = function (m) { return '<g transform="scale(-1,1)">' + m + '</g>'; };
+    if (J) { h += obj('place:josies-cafe', J.name, J.name + ': plan this stop', [J.x - 170, J.y - 90, 330, 250], at(J.x, J.y, 0, .62, flip(P.placeJosies())), J.x - 10, J.y + 150); }
+    if (D) { h += obj('place:paradise', D.name, D.name + ': plan this stop', [D.x - 170, D.y - 90, 350, 250], at(D.x, D.y, 0, .62, flip(P.placeDives())), D.x + 10, D.y + 150); }
     /* an open plot, ready for the next shop */
     h += '<g transform="translate(515,300)" opacity=".9"><circle r="44" fill="none" stroke="' + AREAS.utila.light.accent + '" stroke-width="4" stroke-dasharray="10 10" stroke-linecap="round"/><rect x="-2" y="-34" width="4" height="40" fill="' + W['wood-dk'] + '"/><path d="M2,-34 h28 l-8,10 8,10 h-28z" fill="' + AREAS.utila.light.accent + '"/></g>';
     return h;

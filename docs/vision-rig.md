@@ -12,7 +12,7 @@ off the coast of England that feels believable enough to be a real outfitter's b
    - **A pier with one adventure boat per area.** Walk down it and tap a boat to go.
    - Container cabins in each area's color, a garden deck, a crane: scenery that makes it a place.
 2. **An area (island overview).** The island from above in the area's own sea; participating shops drawn big in their *own*
-   palettes (Josie's pink, Utila Dives' yellow); open plots with a flag where the next shop will go. Real shape and
+   palettes (Josie's pink, Paradise's blue); open plots with a flag where the next shop will go. Real shape and
    coordinates underneath (see hub README); stylised only where somebody participates.
 3. **A stop.** Tap a place: your boat pulls up to the island dock, then the place's sheet opens in the place's own colors:
    pick the day, add Morning / Afternoon / Evening (only blocks it is really open). The plan is kept on the device.
@@ -32,5 +32,5 @@ Utilatab, the whole-trip app: payments, FX hedging and the rest. Nothing in this
 are plain data so it can sit on top later.
 
 ## Prototype status
-`index.html` + `rig.js` (scenes) + `app.js` (flow). Only Utila has places (Josie's is real; Utila Dives is a sample).
+`index.html` + `rig.js` (scenes) + `app.js` (flow). Only Utila has places (Josie's and Paradise are real; Paradise's courses carry SSI/PADI and the card each needs, matched against the diver's card).
 Hours are embedded samples until the hub's place cards are read live.
