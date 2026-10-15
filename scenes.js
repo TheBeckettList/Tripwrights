@@ -13,7 +13,7 @@
     whiteWood: '#FBFAF7', whiteLine: '#E3E7EA', tile: '#F2F5F7', tile2: '#E3EDF3', wall: '#FFFFFF', wallEdge: '#D9E2E8'
   };
   var yachts = {};
-  function yacht(id) { if (!yachts[id]) { yachts[id] = J.yacht(P, TW.REGIONS[id].c, id); } return yachts[id]; }
+  function yacht(id) { if (!yachts[id]) { yachts[id] = J.yacht(P, TW.REGIONS[id].c, TW.REGIONS[id].yacht); } return yachts[id]; }
   function whole(id) { var y = yacht(id), k, h = y.base; for (k in y.parts) { h += y.parts[k].m; } return h; }
 
   function obj(k, label, aria, ring, inner, tagX, tagY) {
@@ -38,10 +38,15 @@
     /* trees and rocks round the edges */
     h += J.tree(940, 660, .38) + J.tree(60, 740, .34) + J.tree(960, 90, .3) + J.palm(120, 960, .5) + J.palm(880, 920, .46) + J.palm(700, 960, .36);
     h += J.rock(40, 1090, .55, 2) + J.rock(950, 950, .5, 3) + J.rock(660, 1010, .35, 4) + J.crab(300, 990) + J.crab(830, 990);
+    /* the boathouse at the foot of the path, kayaks on the sand, the outdoor shower, lamp posts down the path */
+    h += J.block(372, 880, 136, 64, TC.accent, TC.deep, 22, 10) + r(372, 880, 136, 10, '#FFFFFF', 5, ' opacity=".3"') + r(424, 948, 32, 18, '#FFFFFF', 4) + J.bulb(440, 942, 4);
+    h += J.kayak(250, 960, 120, '#F2B632', 80) + J.kayak(262, 1000, 110, TC.accent, 84) + J.outdoorShower(170, 940) + J.lampPost(330, 860) + J.lampPost(610, 960) + J.mailbox(300, 790, TC.accent);
 
-    /* the helicopter on the lawn: cover and insurance, later */
-    h += J.helipad(810, 230, 118, TC) + J.windsock(950, 400);
-    h += obj('heli', 'Cover', 'Helicopter on the lawn: travel and dive cover', [690, 110, 240, 260], at(810, 226, 10, .78, J.heli(TC)), 810, 400);
+    /* the medevac helicopter on its pad: cover, insurance and getting you home if it goes wrong (later) */
+    h += J.medpad(820, 230, 124) + J.windsock(960, 420) + J.flagpole(690, 420, TC.accent);
+    h += obj('heli', 'Cover', 'Medevac helicopter: travel, health and dive cover', [690, 100, 260, 280], at(820, 226, 12, .74, J.medic(TC)), 820, 408);
+    /* the lawn: a fire pit with log seats, a hammock between two trees, flower beds, a bench */
+    h += J.tree(730, 720, .26) + J.firepit(840, 580) + J.hammock(752, 712, 912, 668, TC.soft) + J.flowerbed(684, 470, 70, 40, 3) + J.flowerbed(20, 640, 34, 120, 8) + J.bench(700, 790, 90);
 
     /* the lodge, cut away: hearth on the back wall, books, gear drying, the globe on the rug between two armchairs, the cat */
     var X = 60, Y = 110, Wd = 600, Ht = 500;
@@ -64,11 +69,11 @@
     h += obj('plane', 'Seaplane', 'Seaplane: hop straight to an island', [60, 1100, 270, 230], at(170, 1210, -8, .52, J.floatplane(TC)), 175, 1340);
 
     /* the pier and the yachts, one per region */
-    h += J.pier(P, 530, 990, 72, 760, true) + J.pelican(528, 1110);
+    h += J.pier(P, 530, 990, 72, 790, true) + J.pelican(528, 1110) + J.lampPost(540, 1250) + J.lampPost(592, 1450) + J.lampPost(540, 1650) + J.crate(548, 1520) + J.lifeRing(590, 1330);
     TW.ORDER.forEach(function (id, k) {
-      var rg = TW.REGIONS[id], x = k ? 760 : 375, y = 1360;
-      h += obj('region:' + id, rg.name, rg.name + ' yacht: ' + rg.blurb, [x - 90, y - 190, 180, 400], '<g class="bob">' + at(x, y, 0, .33, whole(id)) + '</g>', x, y + 238);
-      if (!rg.live) { h += soon(x + 60, y - 168, rg.c.deep); }
+      var rg = TW.REGIONS[id], x = k ? 770 : 380, y = 1350;
+      h += obj('region:' + id, rg.name, rg.name + ': ' + rg.vessel + '. ' + rg.blurb, [x - 100, y - 220, 200, 480], '<g class="bob">' + at(x, y, 0, .38, whole(id)) + '</g>', x, y + 280);
+      if (!rg.live) { h += soon(x + 70, y - 200, rg.c.deep); }
     });
     /* under the water */
     h += J.reef(900, 1660, 130, 60, 3) + J.turtle(250, 1620, 1.1, 20) + at(920, 1180, 0, 1, J.jelly(1.2)) + at(120, 1500, 0, 1, J.jelly(1, '#CDBDE6')) + at(380, 1740, -6, 1, J.whale(1));
@@ -86,7 +91,7 @@
       (isl.live ? '' : soon(isl.x + isl.rx * .6, isl.y - isl.ry - 20, rg.c.deep));
   }
   function region(id) {
-    var rg = TW.REGIONS[id], y = yacht(id), h = J.defs(P, TC) + J.sea(0, 0, 1000, 1700, 9), k, part, S = .9, YX = 500, YY = 1100;
+    var rg = TW.REGIONS[id], y = yacht(id), h = J.defs(P, TC) + J.sea(0, 0, 1000, 1700, 9), k, part, S = .88, YX = 500, YY = 1110;
     h += J.reef(120, 560, 90, 50, 5) + J.reef(900, 760, 80, 110, 6) + J.reef(110, 1500, 80, 120, 8) + at(880, 1500, 0, 1, J.jelly(1.2)) + J.turtle(140, 1000, 1, -20) + at(860, 1640, -8, 1, J.whale(.9));
     rg.islands.forEach(function (isl) { h += isle(rg, isl); });
     /* the yacht, huge, every station a button */

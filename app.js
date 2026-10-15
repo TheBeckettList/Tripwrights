@@ -117,7 +117,7 @@
     openSheet('Your plan', any ? 'Saved on this device.' : 'Nothing yet.', any ? h : '<p class="note">Spin the globe, board a yacht, pick something to do.</p><button class="btn" data-globe="1">Open the globe</button>');
   }
   function coverSheet() {
-    openSheet('Cover', 'The helicopter is for when things go sideways.', '<div class="item"><b>Travel and dive cover</b><span class="where">Insurance, medical evacuation and dive accident cover, arranged from here for the days you planned.</span><div class="chips"><span class="chip soon">Not available yet</span></div></div><p class="note">Until then, check your own travel insurance covers diving to the depth you plan.</p>');
+    openSheet('Cover', 'The medevac helicopter is for when things go sideways.', '<div class="item"><b>Travel, health and dive cover</b><span class="where">Travel insurance, medical evacuation and dive accident cover, arranged from here for the days you planned.</span><div class="chips"><span class="chip soon">Not available yet</span></div></div><p class="note">Until then, check your own travel insurance covers diving to the depth you plan.</p>');
   }
   function planeSheet() {
     var h = '';

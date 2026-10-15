@@ -18,7 +18,7 @@
 
   TW.REGIONS = {
     caribbean: {
-      name: 'Caribbean', sub: 'Bay Islands, Honduras', lon: -86.4, lat: 16.3, live: true,
+      name: 'Caribbean', sub: 'Bay Islands, Honduras', lon: -86.4, lat: 16.3, live: true, yacht: 'cat', vessel: 'an explorer catamaran in dazzle stripes',
       c: { accent: '#E9735C', deep: '#B8503B', soft: '#F5B8A8', pale: '#FDEAE4', pop: '#F2B632', tank: '#E9735C', tank2: '#F2F2EE' },
       blurb: 'Reef walls, whale sharks and three islands an hour apart.',
       islands: [
@@ -28,7 +28,7 @@
       ]
     },
     seasia: {
-      name: 'Southeast Asia', sub: 'Gulf of Thailand', lon: 100.0, lat: 9.8, live: false,
+      name: 'Southeast Asia', sub: 'Gulf of Thailand', lon: 100.0, lat: 9.8, live: false, yacht: 'shadow', vessel: 'a yacht-support ship with a crane, tenders and a little sub',
       c: { accent: '#8A6BB8', deep: '#664A93', soft: '#CDBDE6', pale: '#F0EAF8', pop: '#F2A641', tank: '#8A6BB8', tank2: '#F2F2EE' },
       blurb: 'Granite coves, longtail boats and clear, warm water.',
       islands: [

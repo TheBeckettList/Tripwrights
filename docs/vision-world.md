@@ -10,9 +10,10 @@ Diner Dash.) Everything is a place you tap, drawn from above in Josie's hand wit
    armchairs on a rug, a ginger cat, and **the globe** by the fire. The terrace has an umbrella, loungers and a brass telescope;
    a sandy path runs down to the pier.
    - **Globe**: opens the full-screen globe.
-   - **Helicopter** on the lawn: **Cover**. Travel and dive insurance, evacuation, arranged for the days you plan (later; not sold yet).
+   - **Medevac helicopter** on its pad (old field-hospital style: glass bubble, lattice tail, a stretcher pod on each skid): **Cover**. Travel, health and dive insurance and evacuation, arranged for the days you plan (later; not sold yet).
+   - The lawn and beach: a fire pit with log seats, a hammock, flower beds, a flagpole, a bench, the boathouse, kayaks, an outdoor shower, lamp posts down the path and the pier.
    - **Seaplane** at the float dock: hop straight to any island.
-   - **One adventure yacht per region** at the pier: board it to go to that region.
+   - **One 100 m expedition vessel per region** at the pier, each custom to its region: board it to go there.
 2. **The globe** (`#globe`). A simplified real Earth (Natural Earth 110m coastlines) in the island style: green land with a
    sand edge, clouds, the ball's darker ledge. The regions we serve glow in their own colors. Spin it; tap a region and it
    turns to face you, then you are aboard that region's yacht.
@@ -28,11 +29,11 @@ Diner Dash.) Everything is a place you tap, drawn from above in Josie's hand wit
 ## Regions now
 | region | islands | yacht | color |
 |---|---|---|---|
-| Caribbean (live) | Utila, Roatán, Guanaja | white sloop, coral stripe, dive deck | coral `#E9735C` |
-| Southeast Asia (soon) | Koh Tao, Koh Phangan, Koh Samui | junk sail with battens, lanterns | violet `#8A6BB8` |
+| Caribbean (live) | Utila, Roatán, Guanaja | explorer catamaran in dazzle stripes (after *The Beast*): net and spa pool between the bows, sportfisher on the aft deck | coral `#E9735C` |
+| Southeast Asia (soon) | Koh Tao, Koh Phangan, Koh Samui | yacht-support ship: plumb bow, superstructure forward, working deck aft with a crane, dive tender, hobie cat and a little yellow sub | violet `#8A6BB8` |
 
 A new region is a `TW.REGIONS` entry in `data.js` (name, lon/lat, colors, islands with map positions). Its yacht is
-`J.yacht(p, colors, kind)` from the kit; a new `kind` changes only the rig.
+`J.yacht(p, colors, kind)` from the kit (`'cat'` or `'shadow'`); the superstructure's aft end is cut away to show the cabins and dining room.
 
 ## Files
 `index.html` (HUD, sheets), `data.js` (regions, islands, places), `globe.js`, `scenes.js` (home, region, island),
