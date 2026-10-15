@@ -17,6 +17,14 @@ split into blocks and that the map is the way in. We drop everything that isn't 
 
 ## Screens
 
+### 0. Home: the ship
+The front door is an illustrated, top-down cutaway of a modern expedition vessel (adventure, not a cruise
+liner: no buffets, no slides, no neon), like Josie's map is for the cafe. Scroll it bow to stern; tap anything:
+globe in the chart room (where to go), dive locker, snow locker, explore bay, cabins (stay), galley (eat),
+spa deck (rest), sails and tender (sail), helideck (fly). Each opens a sheet of activities for the chosen
+island with Morning/Afternoon/Evening chips. The globe picks the island; the ship then reflects it (gear
+that doesn't apply there dims). Prototype: `index.html`.
+
 ### 1. Dates (first and only setup)
 "When are you here?" Two taps: arrival day and departure day, each with Morning / Afternoon / Evening
 ("I land in the afternoon"). That sets which blocks exist: your first and last days are partly shaded out.
