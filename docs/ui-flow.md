@@ -74,8 +74,8 @@ Business account can claim it later without changing the link.
 Opening the link on the day jumps to today and highlights the current block. Each stop has one-tap
 directions and WhatsApp. Check-in later if shops ask for it.
 
-## Not in v0
-Groups and members, certifications, payments, reviews, photo galleries, admin, multiple islands (the
+## Not in v0 (see diver-flow.md for the dive layer)
+Payments, reviews, photo galleries, admin, multiple islands (the
 hub is one island, so no island picker yet), clock times, WhatsApp accounts.
 
 ## Island scaling
