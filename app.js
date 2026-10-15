@@ -10,9 +10,9 @@
   var all = function (v) { var o = {}; DAY.forEach(function (d) { o[d] = v; }); return o; };
   var PLACES = {
     utila: [
-      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', pal: 'josies-cafe', x: 290, y: 330, real: true, blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
+      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', pal: 'josies-cafe', x: 740, y: 415, real: true, blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
         hours: { mon: '6:15-14:30', tue: '6:15-14:30', wed: '6:15-14:30', thu: '6:15-14:30', fri: '6:15-14:30', sat: '6:15-14:30', sun: 'closed' } },
-      { id: 'utila-dives', name: 'Utila Dives', kind: 'Do', pal: 'utila-dives', x: 710, y: 330, blurb: 'Fun dives, first-time dives and courses off their own dock.',
+      { id: 'utila-dives', name: 'Utila Dives', kind: 'Do', pal: 'utila-dives', x: 270, y: 430, blurb: 'Fun dives, first-time dives and courses off their own dock.',
         hours: (function () { var o = all('7:00-17:00'); o.sun = '7:00-12:00'; return o; })() }
     ]
   };
@@ -20,7 +20,7 @@
 
   /* plan: [{id, day, block}], kept on the device */
   var plan = []; try { plan = JSON.parse(localStorage.getItem('tw-plan') || '[]'); } catch (e) { plan = []; }
-  var day = 'sat';
+  var day = 'sat', showDays = false;
   function save() { try { localStorage.setItem('tw-plan', JSON.stringify(plan)); } catch (e) { } $('pn').textContent = plan.length; }
   function mins(s) { var a = s.split(':'); return +a[0] * 60 + +a[1]; }
   function clock(s) { var a = s.split(':'), h = +a[0]; return (h % 12 || 12) + (a[1] === '00' ? '' : ':' + a[1]) + (h >= 12 ? 'pm' : 'am'); }
@@ -38,7 +38,7 @@
 
   function showHome() {
     view = 'home'; scene.setAttribute('viewBox', '0 0 1000 1500'); scene.innerHTML = U.rig.home(); $('back').hidden = true; location.hash = '';
-    $('sub').textContent = 'Off the coast of England'; $('hint').textContent = 'Tap the globe to pick where you are going, or walk down the pier to a boat.';
+    $('sub').textContent = 'Off the coast of England'; $('hint').textContent = 'Tap the globe, or a boat on the pier.';
     window.scrollTo(0, 0);
   }
   function showArea(id) {
@@ -46,33 +46,34 @@
     scene.setAttribute('viewBox', '0 0 1000 1100'); scene.innerHTML = U.rig.area(id, PLACES[id] || []) +
       '<g id="areaBoat" class="areaboat" style="transform:translate(' + (U.rig.DOCK[0] + 40) + 'px,1320px)">' + U.rig.boat(id) + '</g>';
     $('back').hidden = false; location.hash = id; $('sub').textContent = a.name + ', ' + a.country;
-    $('hint').textContent = a.live ? 'Tap a place to pull the boat up and plan your stop.' : a.name + ' is coming. The island fills in as shops join.';
+    $('hint').textContent = a.live ? 'Tap a place to sail there.' : a.name + ' is coming. The island fills in as shops join.';
     window.scrollTo(0, 0);
     setTimeout(function () { var b = $('areaBoat'); if (b) { b.style.transform = 'translate(' + (U.rig.DOCK[0] + 40) + 'px,1010px)'; } }, 60);
     if (!a.live) { openSheet(a.name, a.country, '<div class="item"><b>Coming</b><span class="where">' + a.blurb + '</span></div><p class="note">The more shops on the island, the more of it you can plan. Utila is open now.</p>'); }
   }
 
   function areaSheet() {
-    openSheet('The globe', 'Where do you want to go?', U.rig.ORDER.map(function (id) {
-      var a = AREAS[id]; return '<div class="item" data-area="' + id + '" style="background:var(--wash)"><b>' + a.name + ', ' + a.country + '</b><span class="where">' + a.blurb + '</span><div class="chips"><span class="chip ' + (a.live ? 'ok' : 'soon') + '">' + (a.live ? 'Live now' : 'Coming') + '</span></div>' +
-        '<button class="btn go" data-go="' + id + '"' + '>' + (a.live ? 'Sail to ' + a.name : 'Look at ' + a.name) + '</button></div>';
+    openSheet('Where to?', '', U.rig.ORDER.map(function (id) {
+      var a = AREAS[id]; return '<button class="btn go" data-go="' + id + '" style="display:flex;width:100%;margin:8px 0;justify-content:space-between' + (a.live ? '' : ';background:var(--wash);color:var(--accent-deep);box-shadow:inset 0 0 0 2px var(--soft)') + '"><span>' + a.name + '</span><span style="font-family:var(--u-body);font-size:14px">' + (a.live ? 'open now' : 'soon') + '</span></button>';
     }).join(''));
   }
   function placeSheet(p) {
+    showDays = false;
     var pal = U.palettes.places[p.pal].light, today = p.hours[day];
     function body() {
       var rows = ['m', 'a', 'e'].map(function (b) {
         var ok = openIn(p, day, b), on = has(p.id, day, b);
         return ok ? '<button class="btn add' + (on ? ' done' : '') + '" data-add="' + b + '">' + (on ? '✓ ' : '+ ') + BLOCK[b][0] + '</button>' : '<span class="chip off" style="margin-right:6px">' + BLOCK[b][0] + '</span>';
       }).join('');
-      return '<div class="days">' + DAY.map(function (d) { return '<button data-day="' + d + '" class="' + (d === day ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' +
-        '<p class="where" style="margin:8px 0">' + (today === 'closed' ? 'Closed this day.' : 'Open ' + clock(today.split('-')[0]) + ' – ' + clock(today.split('-')[1]) + '.') + '</p>' + rows;
+      return '<p class="where" style="margin:10px 0 2px"><b>' + DAYL[day] + '</b> · ' + (today === 'closed' ? 'closed' : clock(today.split('-')[0]) + ' – ' + clock(today.split('-')[1])) + ' <button class="pillbtn" data-showdays="1" style="min-height:32px;padding:0 12px;font-size:13px">change day</button></p>' +
+        (showDays ? '<div class="days">' + DAY.map(function (d) { return '<button data-day="' + d + '" class="' + (d === day ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' : '') + rows;
     }
     var h = '<div data-place="' + p.pal + '" class="pcard" id="pc"><b style="font-family:var(--u-display);font-size:20px">' + p.kind + ' · ' + p.name + '</b><p style="margin:4px 0 0;color:var(--ink2)">' + p.blurb + '</p><div id="pcb">' + body() + '</div></div>';
     openSheet(p.name, p.real ? 'On the map, in its own colors.' : 'Sample place, in its own colors.', h);
     $('pc').onclick = function (e) {
       var t = e.target, d = t.getAttribute('data-day'), b = t.getAttribute('data-add'), i;
-      if (d) { day = d; $('pcb').innerHTML = body(); }
+      if (t.getAttribute('data-showdays')) { showDays = !showDays; $('pcb').innerHTML = body(); }
+      if (d) { day = d; showDays = false; $('pcb').innerHTML = body(); }
       if (b) { if (has(p.id, day, b)) { plan = plan.filter(function (x) { return !(x.id === p.id && x.day === day && x.block === b); }); } else { plan.push({ id: p.id, day: day, block: b }); } save(); $('pcb').innerHTML = body(); }
     };
   }
