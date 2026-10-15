@@ -38,6 +38,7 @@ phones). Sentence case; small-caps style only for MORNING / AFTERNOON / EVENING.
 ## Illustration (the vibe lives here, not in photos)
 Flat, hand-drawn, two or three tones per object, from above, soft shadow, no outlines (an edge is a darker shape underneath).
 - **Home** is the sea-habitat "rig" with a globe hall, helipad, float plane and a pier of area boats (`index.html`, `rig.js`); see `docs/vision-rig.md`. The earlier ship cutaway is superseded.
+- **Drawn with the universe kit** (`art/josie.js` + `art/world.js`, synced from `utilatarian/art`), the same as Paradise: white-wood deck with wood posts, Josie's oblique globe hall (back wall with windows, lamps, the desk with its screen, a chart board, plants), the outfitter's corner (tank rack, crates, wetsuits drying), the same hull for every area boat, plum shadows, warm bulbs. Tripwrights' blue is only on what is Tripwrights: the band on the deck, the helicopter, the wall color, the seaplane tips.
 - **Block icons:** Morning = sun over water, Afternoon = sail, Evening = ship's lantern.
 - **Kinds:** Do = compass, Eat = pot/pan, Stay = lantern + bunk, Rest/spa = shell, Shop/gear = helmet, Transport = tall ship / bubble helicopter.
 - **Empty states:** the bubble helicopter parked out back, the tall ship at the dock with a "back soon" flag.

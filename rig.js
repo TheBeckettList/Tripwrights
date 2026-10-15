@@ -1,113 +1,111 @@
-/* Tripwrights scenes: the sea habitat ("the rig") you start on, and an area's island map. Drawn with the shared island art kit
-   (art/kit.js, Josie's style). Home is 1000 x 1500, an area is 1000 x 1100. Plain ES5. */
+/* Tripwrights scenes: the sea habitat ("the rig") you start on, and an area's island map. Drawn entirely with the shared universe kit
+   (art/josie.js + art/world.js, copied from utilatarian/art): the same white-wood decks, wood posts, plum shadows, tank racks and boats
+   as Paradise and Josie's, so Tripwrights is one more place on the same island. Home is 1000 x 1500, an area is 1000 x 1100. Plain ES5. */
 (function (w) {
   'use strict';
-  var U = w.UART, P = U.props, W = U.palettes.world, TW = U.palettes.places.tripwrights.light, AREAS = U.palettes.areas, at = U.at;
+  var U = w.UART, J = w.UJ, C = J.C, r = J.r, at = J.at, AREAS = U.palettes.areas, TP = U.palettes.places.tripwrights.light;
+  var P = 'tw';
+  /* Tripwrights' own colors, in the shape every place passes to the kit */
+  var TC = {
+    accent: TP.accent, deep: TP.edge, soft: TP.soft, pale: TP.wash, pop: TP.pop, tank: TP.accent, tank2: '#F2F2EE',
+    wallTop: TP.soft, shutter: TP.accent, wainscot: TP.wash, wainscotLine: '#C2DCEA', wallCream: '#FFFFFF', wallBase: '#E3EAF0',
+    whiteWood: '#FBFAF7', whiteLine: '#E3E7EA', tile: '#F2F5F7', tile2: '#E3EDF3', wall: '#FFFFFF', wallEdge: '#D9E2E8'
+  };
+  function areaColors(id) { var L = AREAS[id].light; return { accent: L.accent, deep: L['accent-deep'], soft: L.soft, pop: L.pop, tank: L.accent, tank2: '#F2F2EE' }; }
+
   var ORDER = ['utila', 'roatan', 'guanaja', 'kohtao'];
-  var SLOTS = { utila: [905, 930], roatan: [905, 1235], guanaja: [685, 930], kohtao: [685, 1235] };   /* where each area's boat is tied up */
+  var SLOTS = { utila: [910, 1000], roatan: [910, 1300], guanaja: [690, 960], kohtao: [690, 1300] };   /* where each area's boat is tied up */
   var BOATSCALE = .7;
+  var D = { x: 110, y: 250, w: 500, h: 870 };   /* the platform deck */
 
   function obj(k, label, aria, ring, inner, tagX, tagY) {
     return '<g class="obj" tabindex="0" role="button" aria-label="' + aria + '" data-k="' + k + '"><rect class="ring" x="' + ring[0] + '" y="' + ring[1] + '" width="' + ring[2] + '" height="' + ring[3] + '" rx="30"/><g class="lift">' + inner + '</g>' +
       (label ? '<text class="tag" x="' + tagX + '" y="' + tagY + '" text-anchor="middle">' + label + '</text>' : '') + '</g>';
   }
-  function chalkCliff() {
-    return '<path d="M-20,-20 L250,-20 C240,60 210,120 170,170 C120,230 60,250 -20,250Z" fill="#EFEBE1"/><path d="M-20,-20 L228,-20 C220,50 190,100 150,142 C100,196 50,214 -20,214Z" fill="#A9CC8A"/><path d="M-20,-20 L190,-20 C170,40 130,86 80,112 C40,132 10,138 -20,140Z" fill="#8FBB72"/>' +
-      at(70, 70, 0, 1, '<circle r="26" fill="#FFFFFF"/><circle r="17" fill="#D9483B"/><circle r="9" fill="#FFFFFF"/><circle r="4" fill="#FFE29A"/>') + at(150, 40, 0, 1, P.pot(12)) + at(210, 150, 0, 1, P.rock(14, 3)) + '<text x="86" y="204" font-family="Baloo 2,sans-serif" font-weight="800" font-size="22" fill="#FFFFFF" opacity=".9">England</text>';
-  }
+  function soon(x, y, col) { return '<g transform="translate(' + x + ',' + y + ')" pointer-events="none"><rect x="-28" y="-13" width="56" height="26" rx="13" fill="#FFFFFF"/><text y="6" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="15" fill="' + col + '">soon</text></g>'; }
 
   function home() {
-    var h = '', i, id, sl, a;
-    h += '<rect width="1000" height="1500" fill="#8DB7C4"/><rect y="520" width="1000" height="520" fill="#6FA2B3"/><rect y="1040" width="1000" height="460" fill="#5A93A8"/>';
-    h += at(300, 110, 0, 1, P.wave(110)) + at(680, 90, 0, 1, P.wave(90)) + at(60, 700, 0, 1, P.wave(100)) + at(940, 760, 0, 1, P.wave(80)) + at(80, 1150, 0, 1, P.wave(110)) + at(300, 1400, 0, 1, P.wave(100)) + at(900, 1470, 0, 1, P.wave(70));
-    h += at(300, 760, -8, 1, P.whaleShadow(1.1)) + at(180, 1120, 0, 1, P.jelly(16)) + at(960, 600, 0, 1, P.jelly(12, '#9CE0E8')) + at(520, 1300, 0, 1, P.jelly(14, '#F5B5C8')) + at(870, 1440, 0, 1, P.jelly(11));
-    h += chalkCliff();
-    h += '<path d="M70,70 L420,330 L420,300Z" fill="#FFE9A8" opacity=".25"/>';
-    /* legs and the pontoon ring: the platform stands on four round legs with foam round their feet */
-    [[130, 190], [560, 190], [130, 960], [560, 960]].forEach(function (p) { h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="64" fill="#9CE0E8" opacity=".22"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="46" fill="#FFFFFF" opacity=".4"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="34" fill="#4A6B80"/>'; });
-    /* the platform: a pale blue-grey slab with a soft underside, a deck of sand-colored planks inside */
-    h += '<rect x="86" y="146" width="528" height="888" rx="46" fill="#3F6A86"/><rect x="86" y="138" width="528" height="888" rx="46" fill="#C9DCE6"/><rect x="104" y="156" width="492" height="852" rx="34" fill="#EFE6D6"/>';
-    for (i = 190; i < 1000; i += 28) { h += '<rect x="104" y="' + i + '" width="492" height="2.5" fill="' + W['deck-line'] + '" opacity=".5"/>'; }
-    h += '<rect x="86" y="138" width="528" height="40" rx="22" fill="' + TW.accent + '"/><rect x="86" y="138" width="528" height="26" rx="13" fill="#FFFFFF" opacity=".25"/>';
-    h += at(350, 158, 0, 1, '<rect x="-150" y="-17" width="300" height="34" rx="17" fill="#FFFFFF"/><text y="9" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="25" fill="' + TW.accent + '" letter-spacing="3">TRIPWRIGHTS</text>');
-    /* helipad */
-    h += obj('heli', '', 'Helicopter on the helipad: flights and tours', [190, 190, 320, 260],
-      at(350, 320, 0, 1, '<circle r="112" fill="' + TW.soft + '"/><circle r="94" fill="#FFFFFF" opacity=".55"/><text y="40" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="120" fill="' + TW.accent + '" opacity=".22">H</text>') + at(350, 322, 8, .85, P.heli(TW)), 350, 468);
-    /* globe hall */
-    h += '<rect x="132" y="540" width="436" height="320" rx="40" fill="#A9CFE3"/><rect x="132" y="536" width="436" height="320" rx="40" fill="#E1EEF5"/><rect x="152" y="556" width="396" height="280" rx="30" fill="#FFFFFF"/>';
-    for (i = 0; i < 4; i++) { h += '<rect x="' + (172 + i * 96) + '" y="570" width="84" height="22" rx="8" fill="#CFE6F0"/>'; }
-    h += at(190, 760, 0, 1, '<rect x="-30" y="-24" width="60" height="48" rx="10" fill="' + TW.wash + '"/><path d="M-20,2 q10,-14 20,0 t20,0" stroke="' + TW.accent + '" stroke-width="3.5" fill="none" stroke-linecap="round"/>') + at(510, 770, 0, 1, P.pot(18)) + at(190, 640, 0, 1, P.pot(16));
-    h += obj('globe', 'The globe', 'Giant globe: where do you want to go', [210, 590, 280, 250], at(350, 710, 0, 1, P.globe(82, TW)), 350, 828);
-    h += '<g pointer-events="none">' + at(350, 706, 0, 1, P.dome(190, 150)) + '</g>';
-    /* container cabins in the area colors, the garden deck, the crane */
-    h += at(210, 900, 0, 1, P.container(130, 54, AREAS.utila.light.accent)) + at(360, 900, 0, 1, P.container(130, 54, AREAS.roatan.light.accent)) + at(210, 966, 0, 1, P.container(130, 54, AREAS.guanaja.light.accent)) + at(360, 966, 0, 1, P.container(130, 54, AREAS.kohtao.light.accent));
-    h += at(250, 872, 0, 1, '<rect x="0" y="0" width="0" height="0"/>') + at(210, 934, 90, 1, P.bridge(32)) + at(360, 934, 90, 1, P.bridge(32));
-    h += P.lights(112, 530, 590, 530, 16, 18) + P.lights(112, 880, 590, 880, 16, 14);
-    h += at(160, 600, 0, 1, P.lantern(8)) + at(540, 610, 0, 1, P.lantern(8)) + at(120, 820, 0, 1, P.lantern(8, '#F5B5C8')) + at(580, 820, 0, 1, P.lantern(8, '#BFE9F0')) + at(500, 470, 0, 1, P.lantern(7));
-    h += at(510, 930, 0, 1, P.palm(58)) + at(540, 1000, 0, 1, P.pot(15)) + at(150, 500, 0, 1, P.pot(15)) + at(552, 500, 0, 1, P.pot(15)) + at(552, 580, 0, 1, P.pot(13));
-    h += '<rect x="520" y="200" width="46" height="250" rx="10" fill="#4A6B80"/><rect x="527" y="207" width="32" height="236" rx="6" fill="#6C8DA3"/>';
-    for (i = 220; i < 440; i += 28) { h += '<rect x="527" y="' + i + '" width="32" height="3" fill="#4A6B80"/>'; }
-    h += at(543, 220, 0, 1, '<circle r="15" fill="' + TW.pop + '"/><circle r="8" fill="#FFE29A"/>');
-    /* seaplane dock: a short jetty off the platform and the float plane */
-    h += at(676, 330, 90, 1, P.dock(40, 150));
-    h += obj('plane', '', 'Float plane at the jetty: flights between areas', [680, 180, 280, 300], at(830, 330, 0, .66, P.floatplane(TW)), 830, 470);
-    /* pier with one boat per area */
-    h += at(790, 1100, 0, 1, P.dock(70, 700));
+    var h = J.defs(P, TC), i, id, a, sl, x0 = D.x, y0 = D.y, x1 = D.x + D.w, y1 = D.y + D.h;
+    h += J.sea(0, 0, 1000, 1500, 5);
+    h += at(320, 1300, -8, 1, J.whale(1.1)) + at(70, 1180, 0, 1, J.jelly(1.2)) + at(960, 640, 0, 1, J.jelly(1, '#BFE9F0')) + at(560, 1430, 0, 1, J.jelly(1.1)) + at(860, 180, 0, 1, J.jelly(.9, '#CDBDE6'));
+    /* England: a chalk cliff with its lighthouse, top left */
+    h += J.cliff('M-20,-20 H300 C292,50 262,104 210,140 C150,180 70,192 -20,196Z', 44) + J.tree(200, 40, .32) + J.lighthouse(92, 150, .8) + J.rock(270, 222, .5, 2) + J.rock(40, 262, .4, 3);
+    /* the legs, with foam round their feet, under the corners of the deck */
+    [[x0 + 24, y0 + 24], [x1 - 24, y0 + 24], [x0 + 24, y1 - 10], [x1 - 24, y1 - 10]].forEach(function (p) { h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="64" fill="#FFFFFF" opacity=".25"/><circle cx="' + p[0] + '" cy="' + (p[1] + 8) + '" r="54" fill="' + C.steel + '"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="54" fill="' + C.steelLt + '"/>'; });
+    /* the deck: steel front face, a pale rim, white-wood planks, the Tripwrights band along the top */
+    h += r(x0, y0 + 18, D.w, D.h, C.steel, 40) + r(x0, y0, D.w, D.h, '#EEF2F5', 40) + r(x0 + 14, y0 + 14, D.w - 28, D.h - 28, 'url(#' + P + '-white)', 28) + r(x0 + 14, y0 + 14, D.w - 28, 16, TC.accent, 8);
+    h += J.railH(x0 + 40, y0 + 34, D.w - 80) + J.post(x0 + 22, y0 + 30) + J.post(x1 - 44, y0 + 30);
+
+    /* helipad, top left of the deck */
+    h += J.helipad(x0 + 180, y0 + 190, 122, TC);
+    h += obj('heli', 'Fly', 'Bubble helicopter on the helipad: flights and tours', [x0 + 50, y0 + 60, 260, 270], at(x0 + 180, y0 + 186, 8, .82, J.heli(TC)), x0 + 180, y0 + 352);
+    /* the outfitter's deck, top right: tanks, crates, wetsuits drying, a life ring */
+    h += J.tankRack(x0 + 340, y0 + 150, [TC.tank, TC.tank2, TC.tank, TC.tank]) + J.crate(x0 + 350, y0 + 190) + J.crate(x0 + 396, y0 + 200, .8) + J.crate(x0 + 360, y0 + 226, .9);
+    h += r(x0 + 330, y0 + 262, 130, 6, C.woodDark, 3); for (i = 0; i < 3; i++) { h += J.wetsuit(x0 + 360 + i * 40, y0 + 268, i === 1 ? TC.accent : C.gear, i === 1 ? TC.soft : TC.accent); }
+    h += J.lifeRing(x1 - 30, y0 + 120) + J.lantern(x0 + 450, y0 + 120, .8);
+
+    /* the globe hall: a room in Josie's oblique view, back wall with windows, the globe in the middle, the desk, the chart, plants */
+    var hx = x0 + 40, hy = y0 + 370, hw = D.w - 80, hh = 300;
+    h += J.room(hx, hy, hw, hh, 'url(#' + P + '-tile)', TC, { bottom: [hx + hw / 2 - 40, hx + hw / 2 + 40] }) + J.backWall(P, hx, hy, hw, TC, [hx + 20, hx + hw - 156]);
+    h += J.lamp(hx + 70, hy + 96, 16) + J.lamp(hx + hw - 70, hy + 96, 16);
+    h += J.counter(hx + 14, hy + 196, 96, 46, '#FFFFFF', TC.accent) + J.screen(hx + 28, hy + 214, TC) + J.board(hx + hw - 104, hy + 120, 90, 56, TC) + J.plant(hx + hw - 30, hy + hh - 12, .7) + J.plant(hx + 30, hy + hh - 12, .6);
+    h += obj('globe', 'The globe', 'Giant globe: where do you want to go', [hx + hw / 2 - 110, hy + 96, 220, 210], J.globe(hx + hw / 2, hy + hh - 24, 74, TC), hx + hw / 2, hy + hh + 44);
+    h += J.lights(x0 + 30, hy - 30, x1 - 30, hy - 30, 14, 10);
+
+    /* container cabins in each area's color, the garden corner, lanterns */
+    for (i = 0; i < ORDER.length; i++) { a = areaColors(ORDER[i]); h += J.container(x0 + 34 + i * 110, y0 + 740, 98, 44, a.accent, a.deep); }
+    h += J.lights(x0 + 30, y0 + 720, x1 - 30, y0 + 720, 14, 10);
+    h += J.palm(x0 + 70, y1 - 34, .42) + J.plant(x1 - 50, y1 - 28, .7) + J.crate(x1 - 120, y1 - 60) + J.lantern(x0 + 250, y1 - 26, .8) + J.lifeRing(x0 + 40, y0 + 700);
+
+    /* seaplane jetty off the right side */
+    h += J.pier(P, x1 - 6, y0 + 160, 170, 52, false);
+    h += obj('plane', 'Seaplane', 'Float plane at the jetty: flights between areas', [x1 + 110, y0 + 30, 280, 290], at(x1 + 250, y0 + 180, 0, .62, J.floatplane(TC)), x1 + 250, y0 + 304);
+
+    /* the boat pier: a gangway off the deck, then the long pier with one boat per area */
+    h += J.pier(P, x1 - 6, 760, 190, 56, false) + J.pier(P, 760, 760, 70, 700, true);
     for (i = 0; i < ORDER.length; i++) {
       id = ORDER[i]; a = AREAS[id]; sl = SLOTS[id];
-      h += obj('boat:' + id, a.name, a.name + ' boat: ' + (a.live ? 'open the area' : 'coming soon'), [sl[0] - 60, sl[1] - 130, 120, 270],
-        '<g class="bob">' + at(sl[0], sl[1], 0, BOATSCALE, P.boatKind(a.boat, a.light)) + '</g>', sl[0], sl[1] + 168 + (a.boat === 'longtail' ? 30 : 0));
-      if (!a.live) { h += '<g transform="translate(' + (sl[0] + 36) + ',' + (sl[1] - 100) + ')"><rect x="-26" y="-12" width="52" height="24" rx="12" fill="#FFFFFF"/><text y="5" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="14" fill="' + a.light['accent-deep'] + '">soon</text></g>'; }
+      h += obj('boat:' + id, a.name, a.name + ' boat: ' + (a.live ? 'open the area' : 'coming soon'), [sl[0] - 70, sl[1] - 130, 140, 280],
+        '<g class="bob">' + at(sl[0], sl[1], 0, BOATSCALE, J.boat(P, a.boat, areaColors(id))) + '</g>', sl[0], sl[1] + 150 + (a.boat === 'longtail' ? 40 : 0));
+      if (!a.live) { h += soon(sl[0] + 38, sl[1] - 112, a.light['accent-deep']); }
     }
     return h;
   }
 
-
+  /* an island: foam, wet sand, sand; a little grass inland; trees, rocks, the town along the north shore */
+  function island(seed) {
+    var h = J.land(500, 380, 430, 228, seed, .1) + '<path d="' + J.blob(500, 320, 320, 140, seed + 3, .16) + '" fill="' + C.grass + '" opacity=".45"/>';
+    h += J.palm(470, 200, .5) + J.palm(150, 370, .4) + J.palm(860, 330, .42) + J.tree(640, 230, .32) + J.tree(310, 250, .3);
+    h += J.rock(110, 470, .45, 4) + J.rock(900, 480, .4, 6) + J.rock(940, 410, .3, 8);
+    return h;
+  }
   function utilaIsland(places) {
-    var h = '', i, p, pal, byId = {};
+    var h = '', byId = {}, ac = AREAS.utila.light.accent;
     places.forEach(function (q) { byId[q.id] = q; });
-    h += P.sea(0, 0, 1000, 1100);
-    h += at(150, 880, 0, 1, P.reef(150, 60, 3)) + at(870, 860, 0, 1, P.reef(110, 80, 9)) + at(90, 330, 0, 1, P.reef(80, 120, 5)) + at(920, 220, 0, 1, P.reef(70, 90, 6));
-    h += '<path d="' + P.blobPath(500, 380, 460, 250, 11, .1) + '" fill="#FFFFFF" opacity=".45"/><path d="' + P.blobPath(500, 380, 430, 228, 11, .1) + '" fill="' + W.sand + '"/><path d="' + P.blobPath(500, 330, 340, 160, 14, .14) + '" fill="' + W['leaf-pale'] + '" opacity=".6"/>';
-    /* the bay: a bite out of the south shore with a sandy rim */
-    h += '<path d="' + P.blobPath(515, 560, 175, 150, 21, .1) + '" fill="' + W.sand + '"/><path d="' + P.blobPath(515, 565, 150, 128, 21, .1) + '" fill="' + W.sea + '"/><path d="' + P.blobPath(515, 600, 112, 78, 22, .08) + '" fill="' + W.sea + '"/><path d="' + P.blobPath(515, 700, 104, 96, 23, .08) + '" fill="' + W['sea-2'] + '"/>';
-    h += at(470, 200, 0, 1, P.palm(66)) + at(150, 360, 0, 1, P.palm(52)) + at(860, 330, 0, 1, P.palm(56)) + at(640, 240, 0, 1, P.palm(46)) + at(300, 250, 0, 1, P.palm(42));
-    h += at(105, 460, 0, 1, P.rock(26, 4)) + at(905, 470, 0, 1, P.rock(20, 6)) + at(940, 400, 0, 1, P.rock(14, 8));
-    /* small houses along the north shore, the town */
-    [[330, 178], [392, 152], [560, 152], [622, 178], [700, 198], [236, 214]].forEach(function (c, j) { h += at(c[0], c[1], j * 7 - 12, 1, '<rect x="-22" y="-16" width="44" height="32" rx="5" fill="#FFFFFF"/><rect x="-24" y="-16" width="48" height="13" fill="' + ['#F5B5C8', '#F2A66B', '#EAD9C5'][j % 3] + '"/>'); });
-    /* the places, drawn as their own simplified selves, each on the bay shore with its own pier or dock */
-    /* Josie's on the west shore, Paradise right next door to the east (as in Paradise's sketch); both face the bay */
-    var D = byId.paradise, J = byId['josies-cafe'], flip = function (m) { return '<g transform="scale(-1,1)">' + m + '</g>'; };
-    if (J) { h += obj('place:josies-cafe', J.name, J.name + ': plan this stop', [J.x - 170, J.y - 90, 330, 250], at(J.x, J.y, 0, .62, flip(P.placeJosies())), J.x - 10, J.y + 150); }
-    if (D) { h += obj('place:paradise', D.name, D.name + ': plan this stop', [D.x - 170, D.y - 90, 350, 250], at(D.x, D.y, 0, .62, flip(P.placeDives())), D.x + 10, D.y + 150); }
-    /* an open plot, ready for the next shop */
-    h += '<g transform="translate(515,300)" opacity=".9"><circle r="44" fill="none" stroke="' + AREAS.utila.light.accent + '" stroke-width="4" stroke-dasharray="10 10" stroke-linecap="round"/><rect x="-2" y="-34" width="4" height="40" fill="' + W['wood-dk'] + '"/><path d="M2,-34 h28 l-8,10 8,10 h-28z" fill="' + AREAS.utila.light.accent + '"/></g>';
+    h += J.reef(150, 880, 150, 60, 3) + J.reef(870, 860, 110, 80, 9) + J.reef(90, 330, 80, 120, 5) + J.reef(920, 220, 70, 90, 6);
+    h += island(11);
+    /* the bay: a bite out of the south shore, sand rim to foam to water */
+    h += '<path d="' + J.blob(515, 560, 178, 152, 21, .1) + '" fill="' + C.wetSand + '"/><path d="' + J.blob(515, 562, 164, 140, 21, .1) + '" fill="' + C.foam + '"/><path d="' + J.blob(515, 565, 150, 128, 21, .1) + '" fill="' + C.water + '"/><path d="' + J.blob(515, 720, 110, 110, 23, .08) + '" fill="' + C.water + '"/>' + J.dash(470, 610, 60) + J.dash(540, 680, 50);
+    /* the town along the north shore */
+    [[300, 150, '#F5B5C8', '#E98AA5'], [370, 128, '#F2A66B', '#D98A4E'], [560, 128, '#9CCBE6', '#6FA9CC'], [630, 150, '#F5B5C8', '#E98AA5'], [700, 172, '#EAD9C5', '#D3BFA8'], [230, 190, '#9CCBE6', '#6FA9CC']].forEach(function (c) { h += J.house(c[0] - 22, c[1] - 20, 44, c[2], c[3]); });
+    /* the places, as their own simplified selves, both on the bay shore */
+    var JS = byId['josies-cafe'], PD = byId.paradise, PC = U.paradise ? U.paradise.colors : { accent: '#3E86B8', soft: '#BFE0F2', tank: '#3E86B8', tank2: '#F2F2EE', wallTop: '#9CCBE6' };
+    if (JS) { h += obj('place:josies-cafe', JS.name, JS.name + ': plan this stop', [JS.x - 140, JS.y - 110, 260, 230], at(JS.x, JS.y, 0, .72, J.mini.josies(P)), JS.x - 10, JS.y + 136); }
+    if (PD) { h += obj('place:paradise', PD.name, PD.name + ': plan this stop', [PD.x - 120, PD.y - 130, 240, 320], at(PD.x, PD.y, 0, .72, J.mini.paradise(P, PC)), PD.x, PD.y - 124); }
+    h += J.plot(515, 290, ac);
     return h;
   }
-  /* an island map: the area's own sea, an island, its participating places drawn big in their own palettes, plots waiting for more */
+  /* an island map: the area's own island, its participating places drawn as themselves, plots waiting for more */
   function area(id, places) {
-    if (id === 'utila') { return utilaIsland(places); }
-    var a = AREAS[id], L = a.light, h = '', i, p, pal;
-    h += P.sea(0, 0, 1000, 1100);
-    h += at(260, 880, 0, 1, P.reef(140, 60, 3)) + at(860, 760, 0, 1, P.reef(110, 80, 9)) + at(120, 300, 0, 1, P.reef(90, 120, 5));
-    h += '<path d="' + P.blobPath(500, 430, 430, 300, 11, .12) + '" fill="#FFFFFF" opacity=".45"/><path d="' + P.blobPath(500, 430, 400, 276, 11, .12) + '" fill="' + W.sand + '"/><path d="' + P.blobPath(500, 410, 330, 210, 14, .16) + '" fill="' + W['leaf-pale'] + '" opacity=".55"/>';
-    h += at(470, 235, 0, 1, P.palm(66)) + at(640, 560, 0, 1, P.palm(52)) + at(260, 560, 0, 1, P.palm(48)) + at(850, 470, 0, 1, P.palm(44));
-    h += at(150, 440, 0, 1, P.rock(30, 4)) + at(800, 600, 0, 1, P.rock(22, 6)) + at(915, 450, 0, 1, P.rock(18, 8));
-    h += at(540, 700, 0, 1, P.dock(60, 160));
-    /* places */
-    for (i = 0; i < places.length; i++) {
-      p = places[i]; pal = U.palettes.places[p.pal].light;
-      h += obj('place:' + p.id, p.name, p.name + ': plan this stop', [p.x - 125, p.y - 100, 250, 220], at(p.x, p.y, 0, 1, P.building(pal, 190, 130)) + at(p.x + 100, p.y + 70, 0, 1, P.pot(14)), p.x, p.y + 108);
-    }
-    /* open plots, ready for the next shop */
-    [[350, 560], [660, 410]].forEach(function (s, j) {
-      if (places.length > 1 && j === 1) { return; }
-      h += '<g transform="translate(' + s[0] + ',' + s[1] + ')" opacity=".9"><circle r="44" fill="none" stroke="' + L.accent + '" stroke-width="4" stroke-dasharray="10 10" stroke-linecap="round"/><rect x="-2" y="-34" width="4" height="40" fill="' + W['wood-dk'] + '"/><path d="M2,-34 h28 l-8,10 8,10 h-28z" fill="' + L.accent + '"/></g>';
-    });
+    var h = J.defs(P, TC) + J.sea(0, 0, 1000, 1100, 9);
+    if (id === 'utila') { return h + utilaIsland(places); }
+    var L = AREAS[id].light;
+    h += J.reef(260, 880, 140, 60, 3) + J.reef(860, 760, 110, 80, 9) + J.reef(120, 300, 90, 120, 5) + island(id.length * 3 + 2);
+    h += J.pier(P, 520, 600, 60, 170, true) + J.plot(350, 470, L.accent) + J.plot(660, 400, L.accent);
     return h;
   }
   /* the arriving boat: bow up, scaled; the page moves it with a CSS transform */
-  function boat(id) { var a = AREAS[id]; return at(0, 0, 0, .6, P.boatKind(a.boat, a.light)); }
+  function boat(id) { var a = AREAS[id]; return at(0, 0, 0, .6, J.boat(P, a.boat, areaColors(id))); }
 
   U.rig = { home: home, area: area, boat: boat, ORDER: ORDER, DOCK: [475, 640] };
 })(window);
