@@ -54,5 +54,24 @@
         ] }
     ]
   };
+  /* getting there: each leg is something you can put in your plan (it has hours like a place), with a link out for the booking.
+     Times are approximate and come from public listings; the sheet says so. */
+  var anyTime = all('0:00-23:59');
+  var q = function (t) { return 'https://www.google.com/search?q=' + encodeURIComponent(t); };
+  TW.LEGS = {
+    'leg-fly-sap': { name: 'Fly into San Pedro Sula', kind: 'Getting there', ico: 'plane', hours: anyTime, link: 'https://www.google.com/travel/flights?q=' + encodeURIComponent('flights to SAP San Pedro Sula'), linkName: 'Find flights',
+      blurb: 'The big airport for the Bay Islands (SAP). Many US flights land around midday; land late and you will likely sleep in La Ceiba.' },
+    'leg-bus-lce': { name: 'Bus to La Ceiba', kind: 'Getting there', ico: 'bus', hours: all('5:00-18:00'), link: q('Hedman Alas San Pedro Sula to La Ceiba'), linkName: 'Bus times',
+      blurb: 'About 4 to 6 hours on an air-conditioned coach (Hedman Alas, Viana). Or a short domestic flight to La Ceiba (LCE).' },
+    'leg-ferry-utila': { name: 'Ferry to Utila', kind: 'Getting there', ico: 'ferry', hours: all('8:30-16:45'), link: q('Utila Dream Ferry La Ceiba Utila schedule'), linkName: 'Ferry times',
+      blurb: 'About an hour from La Ceiba on the Utila Dream Ferry, usually a morning and a late-afternoon sailing. Check the day before.' },
+    'leg-fly-utila': { name: 'Small plane to Utila', kind: 'Getting there', ico: 'plane', hours: all('7:00-17:00'), link: q('flights to Utila UII from Roatan La Ceiba'), linkName: 'Find flights',
+      blurb: 'Utila has a little airstrip (UII): hops from Roatán and La Ceiba when you would rather skip the ferry.' }
+  };
+  TW.ROUTES = {
+    caribbean: { to: 'Utila', steps: ['leg-fly-sap', 'leg-bus-lce', 'leg-ferry-utila'], alt: ['leg-fly-utila'], welcome: 'josies-cafe',
+      note: 'Flights, the bus and the ferry each link to who sells them. Add any of them to your plan, or none: use as much of this as you like.' },
+    seasia: { to: 'Koh Tao', steps: [], alt: [], note: 'Fly into Bangkok or Koh Samui, then the high-speed catamarans out to Koh Phangan and Koh Tao. Coming with the first shops there.' }
+  };
   TW.island = function (id) { var k, i, isl; for (k in TW.REGIONS) { isl = TW.REGIONS[k].islands; for (i = 0; i < isl.length; i++) { if (isl[i].id === id) { isl[i].region = k; return isl[i]; } } } return null; };
 })(window);

@@ -66,7 +66,7 @@
 
     /* the seaplane at its float dock */
     h += J.pier(P, 40, 1040, 190, 44, false);
-    h += obj('plane', 'Seaplane', 'Seaplane: hop straight to an island', [60, 1100, 270, 230], at(170, 1210, -8, .52, J.floatplane(TC)), 175, 1340);
+    h += obj('plane', 'Getting there', 'Seaplane: flights, buses and ferries to get there and back', [60, 1100, 270, 230], at(170, 1210, -8, .52, J.floatplane(TC)), 175, 1340);
 
     /* the pier and the yachts, one per region */
     h += J.pier(P, 530, 990, 72, 790, true) + J.pelican(528, 1110) + J.lampPost(540, 1250) + J.lampPost(592, 1450) + J.lampPost(540, 1650) + J.crate(548, 1520) + J.lifeRing(590, 1330);
@@ -94,6 +94,8 @@
     var rg = TW.REGIONS[id], y = yacht(id), h = J.defs(P, TC) + J.sea(0, 0, 1000, 1700, 9), k, part, S = .88, YX = 500, YY = 1110;
     h += J.reef(120, 560, 90, 50, 5) + J.reef(900, 760, 80, 110, 6) + J.reef(110, 1500, 80, 120, 8) + at(880, 1500, 0, 1, J.jelly(1.2)) + J.turtle(140, 1000, 1, -20) + at(860, 1640, -8, 1, J.whale(.9));
     rg.islands.forEach(function (isl) { h += isle(rg, isl); });
+    /* the seaplane, coming in to land: getting here */
+    h += obj('plane', 'Getting here', 'Seaplane: how to get to ' + rg.name, [700, 520, 280, 220], at(850, 620, -30, .42, J.floatplane(TC)), 850, 728);
     /* the yacht, huge, every station a button */
     h += '<g transform="translate(' + YX + ',' + YY + ') scale(' + S + ')">' + y.base;
     for (k in y.parts) { part = y.parts[k]; h += obj('act:' + k, TW.ACTS[k].name, TW.ACTS[k].name + ' aboard: ' + TW.ACTS[k].line, part.box, part.m, part.tag[0], part.tag[1]); }

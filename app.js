@@ -8,6 +8,7 @@
   var DAY = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], DAYL = { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun' };
   var BLOCK = { m: ['Morning', 360, 720], a: ['Afternoon', 720, 1020], e: ['Evening', 1020, 1380] };
   var byId = {}; Object.keys(TW.PLACES).forEach(function (a) { TW.PLACES[a].forEach(function (p) { p.island = a; byId[p.id] = p; }); });
+  Object.keys(TW.LEGS).forEach(function (k) { var l = TW.LEGS[k]; l.id = k; l.pal = 'tripwrights'; byId[k] = l; });
 
   /* plan: [{id, day, block}], kept on the device */
   var plan = []; try { plan = JSON.parse(localStorage.getItem('tw-plan') || '[]'); } catch (e) { plan = []; }
@@ -88,8 +89,9 @@
       return '<p class="where" style="margin:10px 0 2px"><b>' + DAYL[day] + '</b> · ' + (today === 'closed' ? 'closed' : clock(today.split('-')[0]) + ' – ' + clock(today.split('-')[1])) + ' <button class="pill" data-showdays="1" style="min-height:32px;padding:0 12px;font-size:13px;box-shadow:inset 0 0 0 2px var(--soft)">change day</button></p>' +
         (showDays ? '<div class="days">' + DAY.map(function (d) { return '<button data-day="' + d + '" class="' + (d === day ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' : '') + rows + certBlock(p);
     }
-    var h = '<div data-place="' + p.pal + '" class="pcard" id="pc"><b style="font-family:var(--u-display);font-size:20px">' + p.kind + ' · ' + p.name + '</b><p style="margin:4px 0 0;color:var(--ink2)">' + p.blurb + '</p><div id="pcb">' + body() + '</div></div>';
-    openSheet(p.name, p.offers ? 'Courses and dives match your card, SSI or PADI.' : 'In its own colors, open when it is really open.', h);
+    var h = '<div data-place="' + p.pal + '" class="pcard" id="pc"><b style="font-family:var(--u-display);font-size:20px">' + p.kind + ' · ' + p.name + '</b><p style="margin:4px 0 0;color:var(--ink2)">' + p.blurb + '</p>' +
+      (p.link ? '<a class="btn" style="text-decoration:none;margin:10px 0 2px" href="' + p.link + '" target="_blank" rel="noopener">' + p.linkName + ' ↗</a>' : '') + '<div id="pcb">' + body() + '</div></div>';
+    openSheet(p.name, p.offers ? 'Courses and dives match your card, SSI or PADI.' : p.link ? 'Put it in your plan if you like. Times are approximate; check with them.' : 'In its own colors, open when it is really open.', h);
     $('pc').onclick = function (e) {
       var t = e.target, d = t.getAttribute('data-day'), b = t.getAttribute('data-add');
       if (t.getAttribute('data-showdays')) { showDays = !showDays; $('pcb').innerHTML = body(); }
@@ -119,13 +121,18 @@
   function coverSheet() {
     openSheet('Cover', 'The medevac helicopter is for when things go sideways.', '<div class="item"><b>Travel, health and dive cover</b><span class="where">Travel insurance, medical evacuation and dive accident cover, arranged from here for the days you planned.</span><div class="chips"><span class="chip soon">Not available yet</span></div></div><p class="note">Until then, check your own travel insurance covers diving to the depth you plan.</p>');
   }
-  function planeSheet() {
-    var h = '';
-    TW.ORDER.forEach(function (id) {
-      var rg = TW.REGIONS[id]; h += '<h3 style="font:800 18px var(--u-display);margin:12px 0 2px">' + rg.name + '</h3>';
-      rg.islands.forEach(function (isl) { h += '<button class="item" data-isle="' + isl.id + '"><b>' + isl.name + '</b><span class="where">' + (isl.live ? 'Open now' : 'Coming') + '</span></button>'; });
+  /* the seaplane: getting there and away. Each leg can go in the plan; Josie's can be waiting when you land. */
+  function planeSheet(regionId) {
+    var ids = regionId ? [regionId] : TW.ORDER, h = '';
+    ids.forEach(function (id) {
+      var rg = TW.REGIONS[id], rt = TW.ROUTES[id];
+      h += '<h3 style="font:800 18px var(--u-display);margin:12px 0 2px">' + rg.name + ' · to ' + rt.to + '</h3><p class="note" style="margin:2px 0 6px">' + rt.note + '</p>';
+      rt.steps.forEach(function (k, i) { var l = TW.LEGS[k]; h += '<button class="item" data-place="' + k + '"><b>' + (i + 1) + '. ' + l.name + '</b><span class="where">' + l.blurb + '</span></button>'; });
+      rt.alt.forEach(function (k) { var l = TW.LEGS[k]; h += '<button class="item" data-place="' + k + '"><b>Or: ' + l.name + '</b><span class="where">' + l.blurb + '</span></button>'; });
+      if (rt.welcome) { var w = byId[rt.welcome]; h += '<button class="item" data-place="' + w.id + '" style="background:var(--card)"><b>Land to ' + w.name + '</b><span class="where">Have breakfast or lunch waiting for when the ferry gets in.</span></button>'; }
+      if (!rt.steps.length) { h += '<div class="item"><b>Coming</b><span class="where">Routes fill in as the first shops join.</span></div>'; }
     });
-    openSheet('Seaplane', 'Hop straight to an island.', h);
+    openSheet('Getting there', 'Flights, buses and ferries in, and back out again.', h);
   }
 
   /* ---------- taps ---------- */
@@ -133,7 +140,7 @@
     last = el;
     if (k === 'globe') { openGlobe(); }
     else if (k === 'heli') { coverSheet(); }
-    else if (k === 'plane') { planeSheet(); }
+    else if (k === 'plane') { planeSheet(view.kind === 'region' ? view.id : view.kind === 'island' ? view.region : null); }
     else if (k.indexOf('region:') === 0) { go('#r/' + k.slice(7)); }
     else if (k.indexOf('isle:') === 0) { go('#i/' + k.slice(5)); }
     else if (k.indexOf('act:') === 0) { actSheet(view.id, k.slice(4)); }

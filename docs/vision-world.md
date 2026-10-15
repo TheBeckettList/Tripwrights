@@ -12,7 +12,7 @@ Diner Dash.) Everything is a place you tap, drawn from above in Josie's hand wit
    - **Globe**: opens the full-screen globe.
    - **Medevac helicopter** on its pad (old field-hospital style: glass bubble, lattice tail, a stretcher pod on each skid): **Cover**. Travel, health and dive insurance and evacuation, arranged for the days you plan (later; not sold yet).
    - The lawn and beach: a fire pit with log seats, a hammock, flower beds, a flagpole, a bench, the boathouse, kayaks, an outdoor shower, lamp posts down the path and the pier.
-   - **Seaplane** at the float dock: hop straight to any island.
+   - **Seaplane** at the float dock: **Getting there**. For the Caribbean: fly into San Pedro Sula, the bus to La Ceiba, the ferry to Utila (or a small plane), and Josie's ready when you land. Each leg links to who sells it and can go in the plan like a place. The seaplane also sits on every region map ("Getting here").
    - **One 100 m expedition vessel per region** at the pier, each custom to its region: board it to go there.
 2. **The globe** (`#globe`). A simplified real Earth (Natural Earth 110m coastlines) in the island style: green land with a
    sand edge, clouds, the ball's darker ledge. The regions we serve glow in their own colors. Spin it; tap a region and it
@@ -41,3 +41,8 @@ A new region is a `TW.REGIONS` entry in `data.js` (name, lon/lat, colors, island
 
 ## Not now
 Utilatab (payments, FX) and Cover are named, not built. Hours are embedded samples until the hub's place cards are read live.
+
+## The arc (why it is one app)
+Plan a week here, stay a month as a divemaster trainee, become a divemaster: the plan becomes your "what's on", Josie's ordering
+and your dive schedule, then the dive shop's crew app, all one ecosystem and one account. See `utilatarian/VISION.md`,
+"One ecosystem, one person's whole arc".
