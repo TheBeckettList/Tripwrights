@@ -43,7 +43,7 @@
   /* the real places (Josie's and Paradise run our POS); x, y are on their island's map */
   TW.PLACES = {
     utila: [
-      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', acts: ['eat'], pal: 'josies-cafe', x: 270, y: 425, real: true, blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
+      { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', acts: ['eat'], pal: 'josies-cafe', x: 270, y: 425, real: true, enter: 'https://josiescafe.com/', blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
         hours: { mon: '6:15-14:30', tue: '6:15-14:30', wed: '6:15-14:30', thu: '6:15-14:30', fri: '6:15-14:30', sat: '6:15-14:30', sun: 'closed' } },
       { id: 'paradise', name: 'Paradise', kind: 'Dive · Stay', acts: ['dive', 'stay', 'water'], pal: 'paradise', x: 740, y: 470, real: true, blurb: 'A stand-in dive shop and hostel on the bay, next to Josie’s (demo). Courses and hours are samples.',
         hours: (function () { var o = all('7:00-17:00'); o.sun = '7:00-12:00'; return o; })(),

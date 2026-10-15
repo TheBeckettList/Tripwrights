@@ -53,13 +53,24 @@
     if (isl.live) { toast('Tap a place to sail up to it.'); }
     else { toast(isl.name + ' fills in as shops join.'); openSheet(isl.name, rg.sub, '<div class="item"><b>Coming</b><span class="where">No shops on the map here yet. The flags are where the first ones go.</span></div><p class="note">Utila is open now.</p><button class="btn" data-isle="utila">Go to Utila</button>'); }
   }
+  /* stepping inside a place: its own live site fills the screen (Josie's real map, scenes and menu board), with ways back and into your plan */
+  var visiting = null;
+  function enterUrl(p) { var o = /[?&]josies=([^&]+)/.exec(location.search); return (p.id === 'josies-cafe' && o) ? decodeURIComponent(o[1]) : p.enter; }
+  function openVisit(p) {
+    visiting = p; var v = $('visit'), f = $('vframe'), u = enterUrl(p);
+    $('vtitle').textContent = p.name; $('vbackl').textContent = TW.island(p.island).name; $('vopen').href = u; f.title = p.name + ' (live)';
+    if (f.getAttribute('src') !== u) { f.setAttribute('src', u); }
+    v.classList.add('on'); v.setAttribute('aria-hidden', 'false'); $('vback').focus();
+  }
+  function closeVisit() { var v = $('visit'); v.classList.remove('on'); v.setAttribute('aria-hidden', 'true'); visiting = null; }
   function openGlobe() { $('globe').classList.add('on'); $('globe').setAttribute('aria-hidden', 'false'); TW.globe.show(); if (location.hash !== '#globe') { history.pushState(null, '', '#globe'); } }
   function closeGlobe() { $('globe').classList.remove('on'); $('globe').setAttribute('aria-hidden', 'true'); TW.globe.hide(); }
 
   function route() {
     var h = location.hash.slice(1);
     if (h === 'globe') { if (view.kind !== 'home') { showHome(); } openGlobe(); return; }
-    closeGlobe(); shut();
+    closeGlobe(); shut(); closeVisit();
+    if (h.indexOf('p/') === 0 && byId[h.slice(2)] && byId[h.slice(2)].enter) { var vp = byId[h.slice(2)]; if (view.kind !== 'island' || view.id !== vp.island) { showIsland(vp.island); toast(''); } openVisit(vp); return; }
     if (h.indexOf('r/') === 0 && TW.REGIONS[h.slice(2)]) { showRegion(h.slice(2)); }
     else if (h.indexOf('i/') === 0 && TW.island(h.slice(2))) { showIsland(h.slice(2)); }
     else { showHome(); }
@@ -146,6 +157,7 @@
     else if (k.indexOf('act:') === 0) { actSheet(view.id, k.slice(4)); }
     else if (k.indexOf('place:') === 0) {
       var p = byId[k.slice(6)], b = $('arrive'), t = S.DOCK;
+      if (p.enter) { if (b) { b.style.transform = 'translate(' + t[0] + 'px,' + (t[1] + 30) + 'px)'; } clearTimeout(boatTimer); boatTimer = setTimeout(function () { go('#p/' + p.id); }, b ? 1100 : 0); return; }
       if (boatAt === p.id || !b) { placeSheet(p); return; }
       b.style.transform = 'translate(' + t[0] + 'px,' + (t[1] + 30) + 'px)';
       boatAt = p.id; clearTimeout(boatTimer); boatTimer = setTimeout(function () { placeSheet(p); }, 1300);
@@ -165,8 +177,10 @@
   $('back').addEventListener('click', function () { if (view.kind === 'island') { go('#r/' + view.region); } else { go('#'); } });
   $('brand').addEventListener('click', function () { go('#'); });
   $('planbtn').addEventListener('click', planSheet);
+  $('vback').addEventListener('click', function () { if (visiting) { go('#i/' + visiting.island); } });
+  $('vplan').addEventListener('click', function () { if (visiting) { placeSheet(visiting); } });
   $('close').addEventListener('click', shut); veil.addEventListener('click', shut);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if ($('globe').classList.contains('on')) { $('gclose').click(); } else { shut(); } } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (sheet.classList.contains('on')) { shut(); } else if (visiting) { $('vback').click(); } else if ($('globe').classList.contains('on')) { $('gclose').click(); } else { shut(); } } });
   window.addEventListener('hashchange', route);
   save(); route();
 })();
