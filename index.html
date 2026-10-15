@@ -1,38 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-place="tripwrights">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tripwrights</title>
 <meta name="description" content="Plan the trip like an outfitter would: morning, afternoon, evening.">
+<link rel="stylesheet" href="art/tokens.css">
 <style>
-:root{
-  --ink:#0F2A43; --sea:#1F5F8B; --tide:#4A90B8; --ice:#E8F1F6; --paper:#F6F1E7;
-  --brass:#B8873B; --brass-ink:#2A1D07; --kelp:#3E7C6B; --rust:#C8553D;
-  --floor:#E9DFC9; --floor2:#DDD0B4; --wall:#12385A; --deep:#1B5E86; --shallow:#6FB0CF;
-  --bg:#E8F1F6; --text:#0F2A43; --card:#F6F1E7; --line:rgba(15,42,67,.18);
-}
-:root[data-theme="dark"]{ --bg:#0B1E31; --text:#EAF2F7; --card:#14314B; --line:rgba(234,242,247,.2); }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --bg:#0B1E31; --text:#EAF2F7; --card:#14314B; --line:rgba(234,242,247,.2); }
-}
+/* Tripwrights wears the shared island art kit (art/tokens.css, copied from utilatarian/art). Its own color is sea blue. */
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,"Segoe UI",Roboto,sans-serif;
-  display:flex;flex-direction:column;align-items:center}
+body{background:var(--paper);color:var(--ink);font:16px/1.45 var(--u-body);display:flex;flex-direction:column;align-items:center}
 header{width:100%;max-width:560px;padding:14px 16px 6px;display:flex;align-items:baseline;justify-content:space-between}
-h1{font:700 26px/1 Georgia,"Fraunces","Bitter",serif;margin:0;letter-spacing:.2px}
-header small{opacity:.75}
+h1{font:800 30px/1 var(--u-display);margin:0;color:var(--accent-deep);letter-spacing:-.01em}
+header small{color:var(--ink2);font-weight:700}
 main{width:100%;max-width:560px;padding:0 16px 24px}
-.hint{margin:2px 0 10px;opacity:.8;font-size:15px}
-.scene{display:block;width:100%;height:auto;border-radius:18px;border:2px solid var(--line);background:var(--shallow)}
+.hint{margin:2px 0 10px;color:var(--ink2);font-size:15px}
+.scene{display:block;width:100%;height:auto;border-radius:var(--u-r-card);background:var(--w-sea)}
 .obj{cursor:pointer;outline:none}
 .obj .lift{transition:transform .15s ease;transform-box:fill-box;transform-origin:center}
 .obj:hover .lift,.obj:focus-visible .lift{transform:translateY(-6px) scale(1.04)}
 .obj:focus-visible .ring{opacity:1}
 .ring{fill:none;stroke:#fff;stroke-width:5;stroke-dasharray:10 8;opacity:0}
-.badge text{font:700 22px Georgia,serif;fill:var(--brass-ink)}
-.tag{font:700 34px Georgia,serif;fill:#fff;paint-order:stroke;stroke:rgba(10,30,50,.7);stroke-width:9px;stroke-linejoin:round}
+.badge text{font:800 22px 'Baloo 2',sans-serif;fill:var(--accent-ink)}
+.tag{font:800 34px 'Baloo 2',sans-serif;fill:#fff;paint-order:stroke;stroke:rgba(15,42,67,.55);stroke-width:9px;stroke-linejoin:round}
 .bob{animation:bob 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
 .spin{animation:spin 1.1s linear infinite;transform-box:fill-box;transform-origin:center}
 @keyframes rip{50%{transform:translateX(10px)}}
@@ -40,27 +31,26 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
 @keyframes bob{50%{transform:translateY(5px)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion: reduce){.bob,.spin,.ripple{animation:none}}
-/* sheet */
 .veil{position:fixed;inset:0;background:rgba(8,22,36,.45);opacity:0;pointer-events:none;transition:opacity .2s}
 .veil.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:50%;bottom:0;width:100%;max-width:560px;max-height:78vh;overflow:auto;
-  background:var(--card);color:var(--text);border-radius:22px 22px 0 0;border-top:4px solid var(--brass);
-  padding:18px 16px 26px;transform:translate(-50%,105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s;box-shadow:0 -10px 30px rgba(0,0,0,.25)}
+  background:var(--card);color:var(--ink);border-radius:34px 34px 0 0;box-shadow:0 0 0 5px var(--soft),0 -10px 30px rgba(0,0,0,.25);
+  padding:20px 16px 26px;transform:translate(-50%,105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
 .sheet.on{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
-.sheet h2{font:700 24px/1.1 Georgia,serif;margin:0 0 4px}
-.sheet p.lede{margin:0 0 12px;opacity:.85}
-.close{position:absolute;right:10px;top:10px;min-width:44px;min-height:44px;border:0;background:transparent;color:inherit;font-size:26px;cursor:pointer}
-.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0;background:var(--bg)}
-.item b{display:block}
-.item span.where{opacity:.75;font-size:14px}
+.sheet h2{font:800 28px/1.05 var(--u-display);margin:0 0 4px}
+.sheet p.lede{margin:0 0 12px;color:var(--ink2)}
+.close{position:absolute;right:10px;top:10px;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--accent-deep);font:800 26px var(--u-display);cursor:pointer}
+.item{border-radius:24px;padding:12px 14px;margin:8px 0;background:var(--wash);box-shadow:inset 0 0 0 2px var(--soft)}
+.item b{display:block;font-family:var(--u-display);font-size:18px}
+.item span.where{color:var(--ink2);font-size:14px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.chip{font-size:13px;padding:3px 9px;border-radius:99px;border:1px solid var(--line)}
-.chip.ok{border-color:var(--kelp);color:var(--kelp)}
-.chip.off{opacity:.45;text-decoration:line-through}
-.chip.soon{border-color:var(--rust);color:var(--rust)}
-.btn{display:inline-block;min-height:44px;padding:10px 18px;border-radius:12px;background:var(--sea);color:#fff;border:0;font:600 16px inherit;cursor:pointer;margin-top:8px}
+.chip{font-size:13px;font-weight:800;padding:3px 12px;border-radius:14px;background:var(--card);color:var(--ink2);box-shadow:inset 0 0 0 2px var(--line)}
+.chip.ok{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.chip.off{opacity:.5;text-decoration:line-through}
+.chip.soon{background:var(--w-closed);color:var(--w-closed-ink);box-shadow:none}
+.btn{display:inline-block;min-height:44px;padding:10px 24px;border-radius:999px;background:var(--accent);color:var(--accent-ink);border:0;font:800 17px var(--u-display);cursor:pointer;margin-top:8px;box-shadow:0 4px 0 var(--edge)}
 .btn[disabled]{opacity:.5;cursor:default}
-.note{font-size:13px;opacity:.7;margin-top:10px}
+.note{font-size:13px;color:var(--ink2);margin-top:10px}
 </style>
 </head>
 <body>
@@ -74,11 +64,11 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
     <pattern id="tile" width="56" height="56" patternUnits="userSpaceOnUse"><rect width="56" height="56" fill="#F1EADA"/><rect width="28" height="28" fill="#E6DCC4"/><rect x="28" y="28" width="28" height="28" fill="#E6DCC4"/></pattern>
     <pattern id="steel" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#DCE5EA"/><path d="M0 40h40M40 0v40" stroke="#C3D0D8" stroke-width="3"/></pattern>
     <pattern id="pier" width="1000" height="34" patternUnits="userSpaceOnUse"><rect width="1000" height="34" fill="#BFA074"/><rect y="30" width="1000" height="4" fill="#9E845B"/></pattern>
-    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FB0CF"/><stop offset=".5" stop-color="#4A90B8"/><stop offset="1" stop-color="#1F6F9C"/></linearGradient>
+    
   </defs>
 
   <!-- sea, wake, little island, pier -->
-  <rect width="1000" height="2300" fill="url(#sea)"/>
+  <rect width="1000" height="2300" fill="#7FC6D6"/><rect y="800" width="1000" height="800" fill="#5FB0C4"/><rect y="1600" width="1000" height="700" fill="#3E9DB8"/>
   <g stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".55" fill="none">
     <path d="M40 300h80M880 180h70M60 760h60M900 820h60M30 1500h70M910 1900h60M70 1980h90M860 2160h80M620 2250h90M180 2230h70"/>
     <path d="M140 420C110 800 90 1500 150 2100M860 420C890 800 910 1500 850 2100" opacity=".4"/>
@@ -90,19 +80,19 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
     <rect x="860" y="1260" width="150" height="320" fill="url(#pier)"/>
     <rect x="860" y="1260" width="150" height="320" fill="none" stroke="#7B5E3A" stroke-width="6"/>
     <g fill="#33506A"><circle cx="900" cy="1285" r="12"/><circle cx="900" cy="1555" r="12"/></g>
-    <rect x="872" y="1500" width="110" height="46" rx="8" fill="#0F2A43" stroke="#B8873B" stroke-width="4"/>
-    <text x="927" y="1533" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="30" fill="#F6F1E7">Utila</text>
-    <rect x="816" y="1385" width="60" height="44" fill="url(#teak)" stroke="#7B5E3A" stroke-width="4"/>
+    <rect x="872" y="1500" width="110" height="46" rx="8" fill="#0F2A43"/>
+    <text x="927" y="1533" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="30" fill="#F6F1E7">Utila</text>
+    <rect x="816" y="1385" width="60" height="44" fill="url(#teak)"/>
   </g>
 
   <!-- name plate -->
-  <g><rect x="320" y="22" width="360" height="62" rx="12" fill="#0F2A43" stroke="#B8873B" stroke-width="5"/>
-  <text x="500" y="65" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="36" fill="#F6F1E7" letter-spacing="3">TRIPWRIGHTS</text></g>
+  <g><rect x="320" y="22" width="360" height="62" rx="12" fill="#0F2A43"/>
+  <text x="500" y="65" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="36" fill="#F6F1E7" letter-spacing="3">TRIPWRIGHTS</text></g>
 
   <!-- tender behind the stern -->
   <g class="obj" tabindex="0" role="button" aria-label="Tender boat: day boats and sail trips" data-k="sail">
     <rect class="ring" x="400" y="2150" width="200" height="130" rx="30"/>
-    <g class="lift bob"><path d="M500 2170c46 0 70 28 70 62 0 22-16 36-70 36s-70-14-70-36c0-34 24-62 70-62z" fill="#F6F1E7" stroke="#0F2A43" stroke-width="6"/>
+    <g class="lift bob"><path d="M500 2170c46 0 70 28 70 62 0 22-16 36-70 36s-70-14-70-36c0-34 24-62 70-62z" fill="#F6F1E7"/>
       <path d="M500 2184c34 0 52 20 52 46H448c0-26 18-46 52-46z" fill="#4A90B8"/><rect x="474" y="2224" width="52" height="20" rx="6" fill="#B8873B"/>
       <rect x="486" y="2250" width="28" height="22" rx="5" fill="#0F2A43"/></g>
   </g>
@@ -113,18 +103,18 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
   <path d="M500 150C620 258 822 440 822 710L822 1995Q822 2112 755 2120L245 2120Q178 2112 178 1995L178 710C178 440 380 258 500 150Z" fill="url(#teak)"/>
   <path d="M500 150C620 258 822 440 822 710L822 1995Q822 2112 755 2120L245 2120Q178 2112 178 1995L178 710C178 440 380 258 500 150Z" fill="none" stroke="#fff" stroke-width="6" stroke-dasharray="3 14" stroke-linecap="round"/>
   <!-- life rings, deck lamps -->
-  <g fill="#C8553D" stroke="#fff" stroke-width="5"><circle cx="196" cy="760" r="14"/><circle cx="804" cy="760" r="14"/><circle cx="196" cy="1950" r="14"/><circle cx="804" cy="1950" r="14"/></g>
+  <g fill="#C8553D"><circle cx="196" cy="760" r="14"/><circle cx="804" cy="760" r="14"/><circle cx="196" cy="1950" r="14"/><circle cx="804" cy="1950" r="14"/></g>
   <g fill="#FFE29A" opacity=".9"><circle cx="205" cy="1215" r="7"/><circle cx="795" cy="1215" r="7"/><circle cx="205" cy="1585" r="7"/><circle cx="795" cy="1585" r="7"/></g>
 
   <!-- SAIL: foredeck -->
   <g class="obj" tabindex="0" role="button" aria-label="Sails: sail and boat trips" data-k="sail">
     <rect class="ring" x="330" y="190" width="340" height="270" rx="30"/>
     <g class="lift">
-      <path d="M500 300C590 340 650 400 664 470C590 440 540 400 500 300z" fill="#F6F1E7" stroke="#0F2A43" stroke-width="5"/>
-      <path d="M500 300C410 340 350 400 336 470C410 440 460 400 500 300z" fill="#fff" stroke="#0F2A43" stroke-width="5"/>
+      <path d="M500 300C590 340 650 400 664 470C590 440 540 400 500 300z" fill="#F6F1E7"/>
+      <path d="M500 300C410 340 350 400 336 470C410 440 460 400 500 300z" fill="#fff"/>
       <path d="M500 300V470" stroke="#B8873B" stroke-width="7"/>
-      <circle cx="500" cy="300" r="18" fill="#0F2A43" stroke="#B8873B" stroke-width="6"/>
-      <circle cx="500" cy="228" r="22" fill="#6B7C89" stroke="#0F2A43" stroke-width="5"/><circle cx="500" cy="228" r="9" fill="#B8873B"/>
+      <circle cx="500" cy="300" r="18" fill="#0F2A43"/>
+      <circle cx="500" cy="228" r="22" fill="#6B7C89"/><circle cx="500" cy="228" r="9" fill="#B8873B"/>
       <path d="M500 330c40 70 72 120 120 150" stroke="#C8553D" stroke-width="4" fill="none" stroke-dasharray="2 8" stroke-linecap="round"/>
     </g>
     <text class="tag" x="500" y="488" text-anchor="middle">Sail</text>
@@ -132,10 +122,10 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
 
   <!-- BRIDGE / CHART ROOM : the globe -->
   <g>
-    <rect x="248" y="508" width="504" height="292" rx="26" fill="#F3F6F8" stroke="#12385A" stroke-width="9"/>
+    <rect x="248" y="508" width="504" height="292" rx="26" fill="#F3F6F8"/>
     <rect x="262" y="522" width="476" height="44" rx="8" fill="#9CC9DE"/><path d="M380 522v44M500 522v44M620 522v44" stroke="#12385A" stroke-width="5"/>
     <rect x="262" y="572" width="476" height="214" rx="10" fill="url(#tile)"/>
-    <rect x="282" y="610" width="112" height="86" rx="8" fill="#F6F1E7" stroke="#B8873B" stroke-width="5"/><path d="M296 634c26-14 40 14 66-2s26 14 18 30M296 668h82" stroke="#4A90B8" stroke-width="4" fill="none"/>
+    <rect x="282" y="610" width="112" height="86" rx="8" fill="#F6F1E7"/><path d="M296 634c26-14 40 14 66-2s26 14 18 30M296 668h82" stroke="#4A90B8" stroke-width="4" fill="none"/>
     <g transform="translate(690 690)"><circle r="40" fill="none" stroke="#7A5620" stroke-width="10"/><circle r="9" fill="#B8873B"/><path d="M-52 0h104M0 -52v104M-37 -37l74 74M37 -37l-74 74" stroke="#B8873B" stroke-width="6" stroke-linecap="round"/></g>
   </g>
   <g class="obj" tabindex="0" role="button" aria-label="Globe in the chart room: where can you go" data-k="globe">
@@ -147,23 +137,23 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
       <ellipse cx="500" cy="664" rx="74" ry="26" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/><ellipse cx="500" cy="664" rx="26" ry="74" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
       <path d="M416 664a84 84 0 0 1 168 0" fill="none" stroke="#B8873B" stroke-width="8"/><circle cx="566" cy="610" r="7" fill="#C8553D"/>
     </g>
-    <g class="badge"><circle cx="578" cy="598" r="22" fill="#E7B965" stroke="#fff" stroke-width="4"/><text x="578" y="606" text-anchor="middle">1</text></g>
+    <g class="badge"><circle cx="578" cy="598" r="22" fill="#E7B965"/><text x="578" y="606" text-anchor="middle">1</text></g>
     <text class="tag" x="500" y="782" text-anchor="middle">The globe</text>
   </g>
 
   <!-- GEAR HOLD -->
-  <rect x="215" y="826" width="570" height="384" rx="20" fill="url(#steel)" stroke="#12385A" stroke-width="9"/>
+  <rect x="215" y="826" width="570" height="384" rx="20" fill="url(#steel)"/>
   <path d="M500 842V1024M232 1034H768" stroke="#12385A" stroke-width="6" stroke-dasharray="2 12" stroke-linecap="round"/>
 
   <g class="obj" tabindex="0" role="button" aria-label="Diving helmet and tanks: dive and underwater" data-k="dive">
     <rect class="ring" x="228" y="840" width="262" height="190" rx="22"/>
     <g class="lift">
       <rect x="244" y="860" width="140" height="130" rx="12" fill="#6B4A2A"/>
-      <circle cx="314" cy="925" r="52" fill="#B8873B" stroke="#7A5620" stroke-width="6"/>
-      <circle cx="314" cy="925" r="26" fill="#12385A" stroke="#7A5620" stroke-width="7"/><circle cx="305" cy="916" r="6" fill="#9CC9DE"/>
+      <circle cx="314" cy="925" r="52" fill="#B8873B"/>
+      <circle cx="314" cy="925" r="26" fill="#12385A"/><circle cx="305" cy="916" r="6" fill="#9CC9DE"/>
       <rect x="298" y="866" width="32" height="12" rx="4" fill="#E7B965"/>
-      <g><rect x="402" y="866" width="30" height="104" rx="14" fill="#E7B965" stroke="#7A5620" stroke-width="4"/><rect x="402" y="866" width="30" height="26" rx="12" fill="#12385A"/>
-         <rect x="442" y="866" width="30" height="104" rx="14" fill="#4A90B8" stroke="#12385A" stroke-width="4"/><rect x="442" y="866" width="30" height="26" rx="12" fill="#12385A"/></g>
+      <g><rect x="402" y="866" width="30" height="104" rx="14" fill="#E7B965"/><rect x="402" y="866" width="30" height="26" rx="12" fill="#12385A"/>
+         <rect x="442" y="866" width="30" height="104" rx="14" fill="#4A90B8"/><rect x="442" y="866" width="30" height="26" rx="12" fill="#12385A"/></g>
     </g>
     <text class="tag" x="362" y="1020" text-anchor="middle">Dive</text>
   </g>
@@ -177,7 +167,7 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
         <rect x="610" y="842" width="24" height="170" rx="12" fill="#F6F1E7"/><rect x="610" y="842" width="24" height="30" rx="12" fill="#C8553D"/>
         <rect x="650" y="842" width="24" height="170" rx="12" fill="#1F5F8B"/><rect x="650" y="842" width="24" height="30" rx="12" fill="#0F2A43"/>
       </g>
-      <ellipse cx="716" cy="930" rx="22" ry="62" fill="#EAF2F7" stroke="#0F2A43" stroke-width="5"/><path d="M716 876v108" stroke="#C8553D" stroke-width="6"/>
+      <ellipse cx="716" cy="930" rx="22" ry="62" fill="#EAF2F7"/><path d="M716 876v108" stroke="#C8553D" stroke-width="6"/>
     </g>
     <text class="tag" x="640" y="1020" text-anchor="middle">Snow &amp; ice</text>
   </g>
@@ -185,16 +175,16 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
   <g class="obj" tabindex="0" role="button" aria-label="Backpack and compass: hikes and land exploring" data-k="explore">
     <rect class="ring" x="228" y="1044" width="544" height="154" rx="22"/>
     <g class="lift">
-      <rect x="262" y="1060" width="86" height="96" rx="22" fill="#C8553D" stroke="#7A2A1A" stroke-width="5"/><rect x="278" y="1100" width="54" height="34" rx="8" fill="#9E3B28"/><rect x="288" y="1050" width="34" height="18" rx="8" fill="#7A2A1A"/>
-      <g transform="translate(500 1112)"><circle r="46" fill="#F6F1E7" stroke="#B8873B" stroke-width="7"/><path d="M0 -38L10 0 0 38 -10 0z" fill="#C8553D"/><path d="M-38 0L0 -10 38 0 0 10z" fill="#12385A"/><circle r="5" fill="#B8873B"/></g>
-      <rect x="610" y="1070" width="120" height="80" rx="6" fill="#F6F1E7" stroke="#B8873B" stroke-width="4"/><path d="M622 1130c20-30 34 6 54-14s30-14 44-34M640 1082l8 10" stroke="#3E7C6B" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <rect x="262" y="1060" width="86" height="96" rx="22" fill="#C8553D"/><rect x="278" y="1100" width="54" height="34" rx="8" fill="#9E3B28"/><rect x="288" y="1050" width="34" height="18" rx="8" fill="#7A2A1A"/>
+      <g transform="translate(500 1112)"><circle r="46" fill="#F6F1E7"/><path d="M0 -38L10 0 0 38 -10 0z" fill="#C8553D"/><path d="M-38 0L0 -10 38 0 0 10z" fill="#12385A"/><circle r="5" fill="#B8873B"/></g>
+      <rect x="610" y="1070" width="120" height="80" rx="6" fill="#F6F1E7"/><path d="M622 1130c20-30 34 6 54-14s30-14 44-34M640 1082l8 10" stroke="#3E7C6B" stroke-width="5" fill="none" stroke-linecap="round"/>
     </g>
     <text class="tag" x="500" y="1192" text-anchor="middle">Explore</text>
   </g>
 
   <!-- CABINS (stay) -->
-  <rect x="215" y="1236" width="268" height="332" rx="20" fill="#F3F6F8" stroke="#12385A" stroke-width="9"/>
-  <rect x="517" y="1236" width="268" height="332" rx="20" fill="#F3F6F8" stroke="#12385A" stroke-width="9"/>
+  <rect x="215" y="1236" width="268" height="332" rx="20" fill="#F3F6F8"/>
+  <rect x="517" y="1236" width="268" height="332" rx="20" fill="#F3F6F8"/>
   <g class="obj" tabindex="0" role="button" aria-label="Bunks and lantern: places to stay" data-k="stay">
     <rect class="ring" x="224" y="1244" width="250" height="316" rx="20"/>
     <g class="lift">
@@ -202,7 +192,7 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
       <rect x="244" y="1270" width="100" height="150" rx="10" fill="#1F5F8B"/><rect x="244" y="1270" width="100" height="40" rx="10" fill="#F6F1E7"/><rect x="256" y="1276" width="56" height="26" rx="9" fill="#fff"/>
       <rect x="356" y="1270" width="100" height="150" rx="10" fill="#3E7C6B"/><rect x="356" y="1270" width="100" height="40" rx="10" fill="#F6F1E7"/><rect x="368" y="1276" width="56" height="26" rx="9" fill="#fff"/>
       <rect x="244" y="1436" width="212" height="22" rx="8" fill="#B8873B"/>
-      <circle cx="262" cy="1498" r="22" fill="#9CC9DE" stroke="#12385A" stroke-width="6"/>
+      <circle cx="262" cy="1498" r="22" fill="#9CC9DE"/>
       <g><rect x="392" y="1470" width="38" height="50" rx="8" fill="#B8873B"/><rect x="400" y="1480" width="22" height="30" rx="5" fill="#FFE29A"/><path d="M399 1470v-10h24v10" stroke="#7A5620" stroke-width="4" fill="none"/></g>
     </g>
     <text class="tag" x="349" y="1542" text-anchor="middle">Stay</text>
@@ -217,8 +207,8 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
       <circle cx="606" cy="1323" r="30" fill="#2A3946"/><circle cx="606" cy="1323" r="19" fill="#B8873B"/><circle cx="606" cy="1323" r="11" fill="#6B4A2A"/>
       <path d="M596 1290c-4-12 6-14 2-26M614 1290c-4-12 6-14 2-26" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9" class="steam"/>
       <circle cx="700" cy="1323" r="26" fill="#2A3946"/><circle cx="700" cy="1323" r="15" fill="#C8553D"/>
-      <rect x="590" y="1420" width="130" height="96" rx="14" fill="#8B6238" stroke="#6B4A2A" stroke-width="5"/>
-      <g fill="#F6F1E7" stroke="#B8873B" stroke-width="3"><circle cx="618" cy="1450" r="16"/><circle cx="692" cy="1450" r="16"/><circle cx="618" cy="1488" r="16"/><circle cx="692" cy="1488" r="16"/></g>
+      <rect x="590" y="1420" width="130" height="96" rx="14" fill="#8B6238"/>
+      <g fill="#F6F1E7"><circle cx="618" cy="1450" r="16"/><circle cx="692" cy="1450" r="16"/><circle cx="618" cy="1488" r="16"/><circle cx="692" cy="1488" r="16"/></g>
       <g fill="#6B4A2A"><rect x="555" y="1440" width="24" height="56" rx="8"/><rect x="731" y="1440" width="24" height="56" rx="8"/></g>
       <ellipse cx="655" cy="1468" rx="22" ry="14" fill="#E7B965"/><circle cx="648" cy="1465" r="6" fill="#C8553D"/>
     </g>
@@ -229,14 +219,14 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
   <g class="obj" tabindex="0" role="button" aria-label="Plunge pool and sauna: rest and spa" data-k="rest">
     <rect class="ring" x="205" y="1600" width="590" height="340" rx="30"/>
     <g class="lift">
-      <rect x="212" y="1640" width="96" height="170" rx="10" fill="#B07A4A" stroke="#6B4A2A" stroke-width="6"/><path d="M222 1660h76M222 1690h76M222 1720h76M222 1750h76M222 1780h76" stroke="#8B5E34" stroke-width="3"/><circle cx="296" cy="1730" r="5" fill="#E7B965"/>
+      <rect x="212" y="1640" width="96" height="170" rx="10" fill="#B07A4A"/><path d="M222 1660h76M222 1690h76M222 1720h76M222 1750h76M222 1780h76" stroke="#8B5E34" stroke-width="3"/><circle cx="296" cy="1730" r="5" fill="#E7B965"/>
       <rect x="332" y="1630" width="380" height="190" rx="70" fill="#EAF2F7"/>
       <rect x="346" y="1644" width="352" height="162" rx="58" fill="#8FD0E4"/>
       <g class="ripple" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"><path d="M400 1700q22-16 44 0t44 0 44 0 44 0"/><path d="M420 1748q22-16 44 0t44 0 44 0"/></g>
-      <path d="M500 1712c0-22 17-38 40-38s40 16 40 38c-14-8-26-10-40-10s-28 2-40 10z" fill="#F6F1E7" stroke="#B8873B" stroke-width="3" opacity=".8"/>
-      <g><rect x="332" y="1850" width="110" height="46" rx="14" fill="#F6F1E7" stroke="#B8873B" stroke-width="4"/><rect x="340" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
-         <rect x="470" y="1850" width="110" height="46" rx="14" fill="#F6F1E7" stroke="#B8873B" stroke-width="4"/><rect x="478" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
-         <rect x="608" y="1850" width="110" height="46" rx="14" fill="#F6F1E7" stroke="#B8873B" stroke-width="4"/><rect x="616" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/></g>
+      <path d="M500 1712c0-22 17-38 40-38s40 16 40 38c-14-8-26-10-40-10s-28 2-40 10z" fill="#F6F1E7" opacity=".8"/>
+      <g><rect x="332" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="340" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
+         <rect x="470" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="478" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
+         <rect x="608" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="616" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/></g>
       <g><rect x="740" y="1650" width="44" height="44" rx="8" fill="#C9744F"/><circle cx="762" cy="1668" r="26" fill="#3E7C6B"/><rect x="740" y="1760" width="44" height="44" rx="8" fill="#C9744F"/><circle cx="762" cy="1778" r="26" fill="#4E8F5B"/></g>
     </g>
     <text class="tag" x="500" y="1935" text-anchor="middle">Rest &amp; spa</text>
@@ -247,10 +237,10 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
     <rect class="ring" x="260" y="1960" width="480" height="170" rx="30"/>
     <g class="lift">
       <circle cx="500" cy="2042" r="82" fill="#2F4A5E" stroke="#fff" stroke-width="6" stroke-dasharray="16 12"/>
-      <text x="500" y="2078" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="104" fill="#fff" opacity=".28">H</text>
+      <text x="500" y="2078" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="104" fill="#fff" opacity=".28">H</text>
       <rect x="490" y="2084" width="20" height="32" rx="6" fill="#1F5F8B"/>
-      <ellipse cx="500" cy="2030" rx="36" ry="50" fill="#EAF2F7" stroke="#0F2A43" stroke-width="5"/>
-      <ellipse cx="500" cy="2012" rx="25" ry="29" fill="#9CC9DE" stroke="#0F2A43" stroke-width="3"/><ellipse cx="492" cy="2002" rx="7" ry="11" fill="#fff" opacity=".6"/>
+      <ellipse cx="500" cy="2030" rx="36" ry="50" fill="#EAF2F7"/>
+      <ellipse cx="500" cy="2012" rx="25" ry="29" fill="#9CC9DE"/><ellipse cx="492" cy="2002" rx="7" ry="11" fill="#fff" opacity=".6"/>
       <rect x="460" y="2070" width="80" height="7" rx="3" fill="#0F2A43"/>
       <g class="spin"><rect x="396" y="2024" width="208" height="10" rx="5" fill="#0F2A43" opacity=".55"/><rect x="495" y="1946" width="10" height="168" rx="5" fill="#0F2A43" opacity=".55"/></g>
       <circle cx="500" cy="2029" r="9" fill="#B8873B"/>
@@ -258,7 +248,7 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
     <text class="tag" x="330" y="2066" text-anchor="middle">Fly</text>
   </g>
 </svg>
-<p class="note">Everything in the sheets except Josie’s Cafe is sample text. Utila is the first stop on the globe.</p>
+<p class="note">Josie’s Cafe is real; Utila Dives and everything else in the sheets is sample text. Utila is the first stop on the globe.</p>
 </main>
 
 <div class="veil" id="veil"></div>
@@ -283,9 +273,9 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
       '<div class="item"><b>Koh Tao, Thailand</b><span class="where">Later</span><div class="chips"><span class="chip soon">Planned</span></div></div>' +
       '<button class="btn" disabled>Plan Utila (next screen)</button>'},
     dive:{t:'Dive', l:'Reefs, walls, wrecks, and learning to dive. We check certification so you do not find out at the dock.', b:
-      item('Reef dive, two tanks','Sample dive shop · Utila',['m']) +
-      item('Discover scuba (no certificate)','Sample dive shop · Utila',['m','a']) +
-      item('Night dive','Sample dive shop · Utila',['e'])},
+      item('Fun dive, two tanks','Utila Dives · Utila',['m','a']) +
+      item('Discover scuba (no certificate)','Utila Dives · Utila',['m','a']) +
+      item('Night dive','Utila Dives · Utila',['e'])},
     snow:{t:'Snow & ice', l:'Not on Utila, but this is where cold places will live: skiing, sledding, northern lights.', b:
       '<div class="item"><b>Arctic and alpine</b><span class="where">Arrives when an island of snow joins the map.</span></div>'},
     stay:{t:'Stay', l:'A bunk, a room, a cabin. Where you sleep, and when check-in actually is.', b:

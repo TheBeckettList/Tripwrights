@@ -8,40 +8,41 @@ to eat, and will pack your spear gun without comment. Adventure, and the comfort
 Not pink, not neon, not "startup". Calm and capable. It sits in the Utilitarian family (calm, map-first,
 no photo walls), and each shop on the map keeps its own colors on top of this.
 
-## Color (tokens; light first, dark variant follows the same names)
+## Style: one island, one hand
+Tripwrights is drawn in the shared island art kit (`utilatarian/art/`, copied here to `art/`), with **Josie's Cafe as the
+reference**: seen from above, flat soft shapes, **no outlines and no gradients**, one soft ground shadow, round corners, white
+cards with a soft ring, pill buttons with a darker ledge. Sand, sea, wood, plants and rocks are the *shared* island colors;
+Tripwrights' own color, **sea blue**, appears only on what is Tripwrights (buttons, active chips, the hull, the name plate).
+Shops on the map keep their own palette on their pins and sheets, never recolored to ours.
 
-| token | value | use |
+## Color
+Tokens live in `art/palettes.json` (`tripwrights`), light and dark, and are generated into `art/tokens.css`. Do not hand-edit.
+
+| token | light | use |
 |---|---|---|
-| `ink` | `#0F2A43` deep navy | text, headings, the helmet-shadow |
-| `sea` | `#1F5F8B` | primary blue: buttons, active tab, links |
-| `tide` | `#4A90B8` | secondary blue: map water accents, chips |
-| `ice` | `#E8F1F6` | page background, calm panels |
-| `paper` | `#F6F1E7` | cards, plan rows (warm, like a chart or logbook) |
-| `brass` | `#B8873B` | the accent: rules, stars, highlights. Never small text on paper (low contrast) |
-| `brass-ink` | `#2A1D07` | text on brass |
-| `kelp` | `#3E7C6B` | open / ready |
-| `rust` | `#C8553D` | closed / needs attention (a signal color, used sparingly) |
-| dark mode | ink background `#0B1E31`, text `#EAF2F7`, same accents lightened | |
+| `ink` | `#0F2A43` | text, headings |
+| `paper` | `#E8F1F6` | page background (cool, to sit beside Josie's warm cream) |
+| `card` | `#FFFFFF` | cards, sheets (with a `soft` ring) |
+| `accent` | `#1F5F8B` | buttons, active chips, the hull; `accent-ink` is white on it |
+| `soft` / `wash` | `#A9CFE3` / `#D8E9F2` | rings, chip and row backgrounds |
+| `pop` | `#C9953F` brass | jewelry only: a rope, a star, a dial. Never small text |
+| `edge` | `#12405F` | the ledge under a pressed button |
 
-Rule: one blue does the work (`sea`); brass is jewelry; green and rust only mean open/closed or ready/needs.
-Shops are tinted in their *own* palette on their pins and sheets, never recolored to ours.
+Green and rose mean open/closed only (shared `ok` / `closed` tokens) and always come with an icon or a word.
+Dark mode: navy page `#0B1E31`, cards `#14314B`, the accent lightens to sea glass `#6FB0CF`.
 
 ## Type
-- Headings: a sturdy serif with expedition-poster character (suggest *Fraunces* or *Bitter*), used big and
-  sparing. Fallback: Georgia.
-- Body and numbers: plain sans (system stack: `-apple-system, Segoe UI, Roboto, sans-serif`), so it works
-  offline on old phones. Hours use tabular numerals.
-- Sentence case. No all-caps shouting; small-caps for "MORNING / AFTERNOON / EVENING" only.
+Same as Josie's: **Baloo 2** for headings, numbers and labels; **Nunito** for text (with a system fallback so it works offline on old
+phones). Sentence case; small-caps style only for MORNING / AFTERNOON / EVENING. Hours use tabular numerals. No serif.
 
 ## Illustration (the vibe lives here, not in photos)
-Flat, hand-drawn, two or three tones from the palette, thick friendly outline, no gradients.
+Flat, hand-drawn, two or three tones per object, from above, soft shadow, no outlines (an edge is a darker shape underneath).
+- **Home** is the expedition ship cutaway (`index.html`): sails, chart room, gear hold, cabins, galley, spa deck, helideck, tender.
 - **Block icons:** Morning = sun over water, Afternoon = sail, Evening = ship's lantern.
-- **Kinds:** Do = compass, Eat = pot/pan, Stay = lantern + bunk, Rest/spa = shell, Shop/gear = helmet,
-  Transport = tall ship / old bubble helicopter.
+- **Kinds:** Do = compass, Eat = pot/pan, Stay = lantern + bunk, Rest/spa = shell, Shop/gear = helmet, Transport = tall ship / bubble helicopter.
 - **Empty states:** the bubble helicopter parked out back, the tall ship at the dock with a "back soon" flag.
-- **Map:** muted real map (chart paper feel: pale water, thin coast line, a few compass marks), participating
-  places drawn big in their own palette. Where nobody participates it stays a quiet chart.
-- **Corners and dividers:** rope or brass rule, used lightly. No skeuomorphic textures.
+- **Map:** the real map, quietly skinned; participating places drawn big in their own palette (see the hub README).
+- **Corners and dividers:** a rope or a brass rule, used lightly. Fill a free corner with a pot or a rock, like Josie's.
 
 ## Voice
 Warm, plain, a little dry. A capable old expedition outfitter, not a hype man.
