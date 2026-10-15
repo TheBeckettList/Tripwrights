@@ -17,7 +17,7 @@ split into blocks and that the map is the way in. We drop everything that isn't 
 
 ## Screens
 
-### 0. Home: the ship
+### 0. Home: the rig (superseded: see vision-rig.md; the ship text below is the earlier idea)
 The front door is an illustrated, top-down cutaway of a modern expedition vessel (adventure, not a cruise
 liner: no buffets, no slides, no neon), like Josie's map is for the cafe. Scroll it bow to stern; tap anything:
 globe in the chart room (where to go), dive locker, snow locker, explore bay, cabins (stay), galley (eat),

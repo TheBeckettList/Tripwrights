@@ -37,7 +37,7 @@ phones). Sentence case; small-caps style only for MORNING / AFTERNOON / EVENING.
 
 ## Illustration (the vibe lives here, not in photos)
 Flat, hand-drawn, two or three tones per object, from above, soft shadow, no outlines (an edge is a darker shape underneath).
-- **Home** is the expedition ship cutaway (`index.html`): sails, chart room, gear hold, cabins, galley, spa deck, helideck, tender.
+- **Home** is the sea-habitat "rig" with a globe hall, helipad, float plane and a pier of area boats (`index.html`, `rig.js`); see `docs/vision-rig.md`. The earlier ship cutaway is superseded.
 - **Block icons:** Morning = sun over water, Afternoon = sail, Evening = ship's lantern.
 - **Kinds:** Do = compass, Eat = pot/pan, Stay = lantern + bunk, Rest/spa = shell, Shop/gear = helmet, Transport = tall ship / bubble helicopter.
 - **Empty states:** the bubble helicopter parked out back, the tall ship at the dock with a "back soon" flag.

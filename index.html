@@ -51,268 +51,32 @@ main{width:100%;max-width:560px;padding:0 16px 24px}
 .btn{display:inline-block;min-height:44px;padding:10px 24px;border-radius:999px;background:var(--accent);color:var(--accent-ink);border:0;font:800 17px var(--u-display);cursor:pointer;margin-top:8px;box-shadow:0 4px 0 var(--edge)}
 .btn[disabled]{opacity:.5;cursor:default}
 .note{font-size:13px;color:var(--ink2);margin-top:10px}
+.bar{width:100%;max-width:560px;display:flex;align-items:center;gap:8px;padding:0 16px 8px}
+.pillbtn{border:0;cursor:pointer;min-height:44px;padding:0 16px;border-radius:999px;background:var(--wash);color:var(--accent-deep);box-shadow:inset 0 0 0 2px var(--soft);font:800 15px var(--u-display)}
+.pillbtn.plan{margin-left:auto;background:var(--accent);color:var(--accent-ink);box-shadow:0 3px 0 var(--edge)}
+.areaboat{transition:transform 1.4s cubic-bezier(.3,.7,.3,1)}
+.days{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.days button{border:0;cursor:pointer;min-height:36px;padding:0 12px;border-radius:14px;background:var(--wash);color:var(--accent-deep);box-shadow:inset 0 0 0 2px var(--soft);font:800 14px var(--u-body)}
+.days button.on{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.pcard{border-radius:26px;padding:14px 16px;margin:6px 0 10px}
+.add{margin:6px 6px 0 0;min-height:40px;padding:8px 16px;font-size:15px}
+.add.done{background:var(--w-ok);color:var(--w-ok-ink);box-shadow:none}
 </style>
 </head>
 <body>
-<header><h1>Tripwrights</h1><small>Expedition outfitters</small></header>
+<header><h1>Tripwrights</h1><small id="sub">Off the coast of England</small></header>
+<div class="bar"><button class="pillbtn" id="back" hidden>&larr; The rig</button><button class="pillbtn plan" id="planbtn">Plan &middot; <span id="pn">0</span></button></div>
 <main>
-<p class="hint">Walk the ship from bow to stern. Tap anything aboard to see what you can do with it.</p>
-
-<svg class="scene" viewBox="0 0 1000 2300" role="group" aria-label="The Tripwrights expedition ship, seen from above. Tap anything on board to see what you can do.">
-  <defs>
-    <pattern id="teak" width="1000" height="36" patternUnits="userSpaceOnUse"><rect width="1000" height="36" fill="#C9A878"/><rect y="32" width="1000" height="4" fill="#B08F5F"/></pattern>
-    <pattern id="tile" width="56" height="56" patternUnits="userSpaceOnUse"><rect width="56" height="56" fill="#F1EADA"/><rect width="28" height="28" fill="#E6DCC4"/><rect x="28" y="28" width="28" height="28" fill="#E6DCC4"/></pattern>
-    <pattern id="steel" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#DCE5EA"/><path d="M0 40h40M40 0v40" stroke="#C3D0D8" stroke-width="3"/></pattern>
-    <pattern id="pier" width="1000" height="34" patternUnits="userSpaceOnUse"><rect width="1000" height="34" fill="#BFA074"/><rect y="30" width="1000" height="4" fill="#9E845B"/></pattern>
-    
-  </defs>
-
-  <!-- sea, wake, little island, pier -->
-  <rect width="1000" height="2300" fill="#7FC6D6"/><rect y="800" width="1000" height="800" fill="#5FB0C4"/><rect y="1600" width="1000" height="700" fill="#3E9DB8"/>
-  <g stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".55" fill="none">
-    <path d="M40 300h80M880 180h70M60 760h60M900 820h60M30 1500h70M910 1900h60M70 1980h90M860 2160h80M620 2250h90M180 2230h70"/>
-    <path d="M140 420C110 800 90 1500 150 2100M860 420C890 800 910 1500 850 2100" opacity=".4"/>
-  </g>
-  <g><ellipse cx="40" cy="1130" rx="110" ry="95" fill="#EAD9A9"/><ellipse cx="40" cy="1130" rx="86" ry="72" fill="#F3E7BD"/>
-    <path d="M62 1110c-6-40 4-70 16-92" stroke="#7A5530" stroke-width="9" fill="none" stroke-linecap="round"/>
-    <g fill="#4E8F5B"><path d="M78 1018c-40-8-62 10-70 28 26-14 46-16 70-8z"/><path d="M78 1018c34-18 58-6 70 12-24-8-44-6-70-4z"/><path d="M78 1018c-6-30 8-46 26-52-8 18-12 34-26 52z"/></g></g>
-  <g>
-    <rect x="860" y="1260" width="150" height="320" fill="url(#pier)"/>
-    <rect x="860" y="1260" width="150" height="320" fill="none" stroke="#7B5E3A" stroke-width="6"/>
-    <g fill="#33506A"><circle cx="900" cy="1285" r="12"/><circle cx="900" cy="1555" r="12"/></g>
-    <rect x="872" y="1500" width="110" height="46" rx="8" fill="#0F2A43"/>
-    <text x="927" y="1533" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="30" fill="#F6F1E7">Utila</text>
-    <rect x="816" y="1385" width="60" height="44" fill="url(#teak)"/>
-  </g>
-
-  <!-- name plate -->
-  <g><rect x="320" y="22" width="360" height="62" rx="12" fill="#0F2A43"/>
-  <text x="500" y="65" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="36" fill="#F6F1E7" letter-spacing="3">TRIPWRIGHTS</text></g>
-
-  <!-- tender behind the stern -->
-  <g class="obj" tabindex="0" role="button" aria-label="Tender boat: day boats and sail trips" data-k="sail">
-    <rect class="ring" x="400" y="2150" width="200" height="130" rx="30"/>
-    <g class="lift bob"><path d="M500 2170c46 0 70 28 70 62 0 22-16 36-70 36s-70-14-70-36c0-34 24-62 70-62z" fill="#F6F1E7"/>
-      <path d="M500 2184c34 0 52 20 52 46H448c0-26 18-46 52-46z" fill="#4A90B8"/><rect x="474" y="2224" width="52" height="20" rx="6" fill="#B8873B"/>
-      <rect x="486" y="2250" width="28" height="22" rx="5" fill="#0F2A43"/></g>
-  </g>
-
-  <!-- HULL -->
-  <path d="M500 100C640 230 850 420 850 700L850 2000Q850 2140 770 2150L230 2150Q150 2140 150 2000L150 700C150 420 360 230 500 100Z" fill="#12385A"/>
-  <path d="M500 128C628 244 836 430 836 706L836 1998Q836 2128 764 2136L236 2136Q164 2128 164 1998L164 706C164 430 372 244 500 128Z" fill="#F6F1E7"/>
-  <path d="M500 150C620 258 822 440 822 710L822 1995Q822 2112 755 2120L245 2120Q178 2112 178 1995L178 710C178 440 380 258 500 150Z" fill="url(#teak)"/>
-  <path d="M500 150C620 258 822 440 822 710L822 1995Q822 2112 755 2120L245 2120Q178 2112 178 1995L178 710C178 440 380 258 500 150Z" fill="none" stroke="#fff" stroke-width="6" stroke-dasharray="3 14" stroke-linecap="round"/>
-  <!-- life rings, deck lamps -->
-  <g fill="#C8553D"><circle cx="196" cy="760" r="14"/><circle cx="804" cy="760" r="14"/><circle cx="196" cy="1950" r="14"/><circle cx="804" cy="1950" r="14"/></g>
-  <g fill="#FFE29A" opacity=".9"><circle cx="205" cy="1215" r="7"/><circle cx="795" cy="1215" r="7"/><circle cx="205" cy="1585" r="7"/><circle cx="795" cy="1585" r="7"/></g>
-
-  <!-- SAIL: foredeck -->
-  <g class="obj" tabindex="0" role="button" aria-label="Sails: sail and boat trips" data-k="sail">
-    <rect class="ring" x="330" y="190" width="340" height="270" rx="30"/>
-    <g class="lift">
-      <path d="M500 300C590 340 650 400 664 470C590 440 540 400 500 300z" fill="#F6F1E7"/>
-      <path d="M500 300C410 340 350 400 336 470C410 440 460 400 500 300z" fill="#fff"/>
-      <path d="M500 300V470" stroke="#B8873B" stroke-width="7"/>
-      <circle cx="500" cy="300" r="18" fill="#0F2A43"/>
-      <circle cx="500" cy="228" r="22" fill="#6B7C89"/><circle cx="500" cy="228" r="9" fill="#B8873B"/>
-      <path d="M500 330c40 70 72 120 120 150" stroke="#C8553D" stroke-width="4" fill="none" stroke-dasharray="2 8" stroke-linecap="round"/>
-    </g>
-    <text class="tag" x="500" y="488" text-anchor="middle">Sail</text>
-  </g>
-
-  <!-- BRIDGE / CHART ROOM : the globe -->
-  <g>
-    <rect x="248" y="508" width="504" height="292" rx="26" fill="#F3F6F8"/>
-    <rect x="262" y="522" width="476" height="44" rx="8" fill="#9CC9DE"/><path d="M380 522v44M500 522v44M620 522v44" stroke="#12385A" stroke-width="5"/>
-    <rect x="262" y="572" width="476" height="214" rx="10" fill="url(#tile)"/>
-    <rect x="282" y="610" width="112" height="86" rx="8" fill="#F6F1E7"/><path d="M296 634c26-14 40 14 66-2s26 14 18 30M296 668h82" stroke="#4A90B8" stroke-width="4" fill="none"/>
-    <g transform="translate(690 690)"><circle r="40" fill="none" stroke="#7A5620" stroke-width="10"/><circle r="9" fill="#B8873B"/><path d="M-52 0h104M0 -52v104M-37 -37l74 74M37 -37l-74 74" stroke="#B8873B" stroke-width="6" stroke-linecap="round"/></g>
-  </g>
-  <g class="obj" tabindex="0" role="button" aria-label="Globe in the chart room: where can you go" data-k="globe">
-    <rect class="ring" x="390" y="570" width="220" height="220" rx="30"/>
-    <g class="lift">
-      <ellipse cx="500" cy="752" rx="92" ry="16" fill="#000" opacity=".15"/>
-      <circle cx="500" cy="664" r="84" fill="#0F2A43"/><circle cx="500" cy="664" r="74" fill="#2F7FAE"/>
-      <g fill="#9BC38C"><path d="M452 632c18-16 36-12 48 0s6 24-12 24-18 18-36 12-12-24 0-36z"/><path d="M526 690c18-6 34 6 28 24s-24 24-36 12-6-30 8-36z"/><path d="M482 600c12-6 30-3 33 6s-18 12-33 3z"/></g>
-      <ellipse cx="500" cy="664" rx="74" ry="26" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/><ellipse cx="500" cy="664" rx="26" ry="74" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
-      <path d="M416 664a84 84 0 0 1 168 0" fill="none" stroke="#B8873B" stroke-width="8"/><circle cx="566" cy="610" r="7" fill="#C8553D"/>
-    </g>
-    <g class="badge"><circle cx="578" cy="598" r="22" fill="#E7B965"/><text x="578" y="606" text-anchor="middle">1</text></g>
-    <text class="tag" x="500" y="782" text-anchor="middle">The globe</text>
-  </g>
-
-  <!-- GEAR HOLD -->
-  <rect x="215" y="826" width="570" height="384" rx="20" fill="url(#steel)"/>
-  <path d="M500 842V1024M232 1034H768" stroke="#12385A" stroke-width="6" stroke-dasharray="2 12" stroke-linecap="round"/>
-
-  <g class="obj" tabindex="0" role="button" aria-label="Diving helmet and tanks: dive and underwater" data-k="dive">
-    <rect class="ring" x="228" y="840" width="262" height="190" rx="22"/>
-    <g class="lift">
-      <rect x="244" y="860" width="140" height="130" rx="12" fill="#6B4A2A"/>
-      <circle cx="314" cy="925" r="52" fill="#B8873B"/>
-      <circle cx="314" cy="925" r="26" fill="#12385A"/><circle cx="305" cy="916" r="6" fill="#9CC9DE"/>
-      <rect x="298" y="866" width="32" height="12" rx="4" fill="#E7B965"/>
-      <g><rect x="402" y="866" width="30" height="104" rx="14" fill="#E7B965"/><rect x="402" y="866" width="30" height="26" rx="12" fill="#12385A"/>
-         <rect x="442" y="866" width="30" height="104" rx="14" fill="#4A90B8"/><rect x="442" y="866" width="30" height="26" rx="12" fill="#12385A"/></g>
-    </g>
-    <text class="tag" x="362" y="1020" text-anchor="middle">Dive</text>
-  </g>
-
-  <g class="obj" tabindex="0" role="button" aria-label="Skis: snow and ice" data-k="snow">
-    <rect class="ring" x="510" y="840" width="262" height="190" rx="22"/>
-    <g class="lift">
-      <rect x="524" y="860" width="232" height="130" rx="12" fill="#6B4A2A"/>
-      <g transform="rotate(-12 640 925)">
-        <rect x="570" y="842" width="24" height="170" rx="12" fill="#4A90B8"/><rect x="570" y="842" width="24" height="30" rx="12" fill="#0F2A43"/>
-        <rect x="610" y="842" width="24" height="170" rx="12" fill="#F6F1E7"/><rect x="610" y="842" width="24" height="30" rx="12" fill="#C8553D"/>
-        <rect x="650" y="842" width="24" height="170" rx="12" fill="#1F5F8B"/><rect x="650" y="842" width="24" height="30" rx="12" fill="#0F2A43"/>
-      </g>
-      <ellipse cx="716" cy="930" rx="22" ry="62" fill="#EAF2F7"/><path d="M716 876v108" stroke="#C8553D" stroke-width="6"/>
-    </g>
-    <text class="tag" x="640" y="1020" text-anchor="middle">Snow &amp; ice</text>
-  </g>
-
-  <g class="obj" tabindex="0" role="button" aria-label="Backpack and compass: hikes and land exploring" data-k="explore">
-    <rect class="ring" x="228" y="1044" width="544" height="154" rx="22"/>
-    <g class="lift">
-      <rect x="262" y="1060" width="86" height="96" rx="22" fill="#C8553D"/><rect x="278" y="1100" width="54" height="34" rx="8" fill="#9E3B28"/><rect x="288" y="1050" width="34" height="18" rx="8" fill="#7A2A1A"/>
-      <g transform="translate(500 1112)"><circle r="46" fill="#F6F1E7"/><path d="M0 -38L10 0 0 38 -10 0z" fill="#C8553D"/><path d="M-38 0L0 -10 38 0 0 10z" fill="#12385A"/><circle r="5" fill="#B8873B"/></g>
-      <rect x="610" y="1070" width="120" height="80" rx="6" fill="#F6F1E7"/><path d="M622 1130c20-30 34 6 54-14s30-14 44-34M640 1082l8 10" stroke="#3E7C6B" stroke-width="5" fill="none" stroke-linecap="round"/>
-    </g>
-    <text class="tag" x="500" y="1192" text-anchor="middle">Explore</text>
-  </g>
-
-  <!-- CABINS (stay) -->
-  <rect x="215" y="1236" width="268" height="332" rx="20" fill="#F3F6F8"/>
-  <rect x="517" y="1236" width="268" height="332" rx="20" fill="#F3F6F8"/>
-  <g class="obj" tabindex="0" role="button" aria-label="Bunks and lantern: places to stay" data-k="stay">
-    <rect class="ring" x="224" y="1244" width="250" height="316" rx="20"/>
-    <g class="lift">
-      <rect x="232" y="1256" width="236" height="296" rx="12" fill="#E9DFC9"/>
-      <rect x="244" y="1270" width="100" height="150" rx="10" fill="#1F5F8B"/><rect x="244" y="1270" width="100" height="40" rx="10" fill="#F6F1E7"/><rect x="256" y="1276" width="56" height="26" rx="9" fill="#fff"/>
-      <rect x="356" y="1270" width="100" height="150" rx="10" fill="#3E7C6B"/><rect x="356" y="1270" width="100" height="40" rx="10" fill="#F6F1E7"/><rect x="368" y="1276" width="56" height="26" rx="9" fill="#fff"/>
-      <rect x="244" y="1436" width="212" height="22" rx="8" fill="#B8873B"/>
-      <circle cx="262" cy="1498" r="22" fill="#9CC9DE"/>
-      <g><rect x="392" y="1470" width="38" height="50" rx="8" fill="#B8873B"/><rect x="400" y="1480" width="22" height="30" rx="5" fill="#FFE29A"/><path d="M399 1470v-10h24v10" stroke="#7A5620" stroke-width="4" fill="none"/></g>
-    </g>
-    <text class="tag" x="349" y="1542" text-anchor="middle">Stay</text>
-  </g>
-
-  <!-- GALLEY + SALOON (eat) -->
-  <g class="obj" tabindex="0" role="button" aria-label="Galley and saloon: places to eat" data-k="eat">
-    <rect class="ring" x="526" y="1244" width="250" height="316" rx="20"/>
-    <g class="lift">
-      <rect x="534" y="1256" width="236" height="296" rx="12" fill="#E9DFC9"/>
-      <rect x="544" y="1268" width="216" height="110" rx="10" fill="#C9D3DA"/><rect x="552" y="1276" width="200" height="94" rx="8" fill="#E8EEF2"/>
-      <circle cx="606" cy="1323" r="30" fill="#2A3946"/><circle cx="606" cy="1323" r="19" fill="#B8873B"/><circle cx="606" cy="1323" r="11" fill="#6B4A2A"/>
-      <path d="M596 1290c-4-12 6-14 2-26M614 1290c-4-12 6-14 2-26" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9" class="steam"/>
-      <circle cx="700" cy="1323" r="26" fill="#2A3946"/><circle cx="700" cy="1323" r="15" fill="#C8553D"/>
-      <rect x="590" y="1420" width="130" height="96" rx="14" fill="#8B6238"/>
-      <g fill="#F6F1E7"><circle cx="618" cy="1450" r="16"/><circle cx="692" cy="1450" r="16"/><circle cx="618" cy="1488" r="16"/><circle cx="692" cy="1488" r="16"/></g>
-      <g fill="#6B4A2A"><rect x="555" y="1440" width="24" height="56" rx="8"/><rect x="731" y="1440" width="24" height="56" rx="8"/></g>
-      <ellipse cx="655" cy="1468" rx="22" ry="14" fill="#E7B965"/><circle cx="648" cy="1465" r="6" fill="#C8553D"/>
-    </g>
-    <text class="tag" x="651" y="1542" text-anchor="middle">Eat</text>
-  </g>
-
-  <!-- SPA DECK (rest) -->
-  <g class="obj" tabindex="0" role="button" aria-label="Plunge pool and sauna: rest and spa" data-k="rest">
-    <rect class="ring" x="205" y="1600" width="590" height="340" rx="30"/>
-    <g class="lift">
-      <rect x="212" y="1640" width="96" height="170" rx="10" fill="#B07A4A"/><path d="M222 1660h76M222 1690h76M222 1720h76M222 1750h76M222 1780h76" stroke="#8B5E34" stroke-width="3"/><circle cx="296" cy="1730" r="5" fill="#E7B965"/>
-      <rect x="332" y="1630" width="380" height="190" rx="70" fill="#EAF2F7"/>
-      <rect x="346" y="1644" width="352" height="162" rx="58" fill="#8FD0E4"/>
-      <g class="ripple" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"><path d="M400 1700q22-16 44 0t44 0 44 0 44 0"/><path d="M420 1748q22-16 44 0t44 0 44 0"/></g>
-      <path d="M500 1712c0-22 17-38 40-38s40 16 40 38c-14-8-26-10-40-10s-28 2-40 10z" fill="#F6F1E7" opacity=".8"/>
-      <g><rect x="332" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="340" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
-         <rect x="470" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="478" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/>
-         <rect x="608" y="1850" width="110" height="46" rx="14" fill="#F6F1E7"/><rect x="616" y="1856" width="30" height="34" rx="10" fill="#9CC9DE"/></g>
-      <g><rect x="740" y="1650" width="44" height="44" rx="8" fill="#C9744F"/><circle cx="762" cy="1668" r="26" fill="#3E7C6B"/><rect x="740" y="1760" width="44" height="44" rx="8" fill="#C9744F"/><circle cx="762" cy="1778" r="26" fill="#4E8F5B"/></g>
-    </g>
-    <text class="tag" x="500" y="1935" text-anchor="middle">Rest &amp; spa</text>
-  </g>
-
-  <!-- HELIDECK (fly) -->
-  <g class="obj" tabindex="0" role="button" aria-label="Bubble helicopter on the helideck: flights and tours" data-k="fly">
-    <rect class="ring" x="260" y="1960" width="480" height="170" rx="30"/>
-    <g class="lift">
-      <circle cx="500" cy="2042" r="82" fill="#2F4A5E" stroke="#fff" stroke-width="6" stroke-dasharray="16 12"/>
-      <text x="500" y="2078" text-anchor="middle" font-family="Baloo 2,Nunito,sans-serif" font-weight="700" font-size="104" fill="#fff" opacity=".28">H</text>
-      <rect x="490" y="2084" width="20" height="32" rx="6" fill="#1F5F8B"/>
-      <ellipse cx="500" cy="2030" rx="36" ry="50" fill="#EAF2F7"/>
-      <ellipse cx="500" cy="2012" rx="25" ry="29" fill="#9CC9DE"/><ellipse cx="492" cy="2002" rx="7" ry="11" fill="#fff" opacity=".6"/>
-      <rect x="460" y="2070" width="80" height="7" rx="3" fill="#0F2A43"/>
-      <g class="spin"><rect x="396" y="2024" width="208" height="10" rx="5" fill="#0F2A43" opacity=".55"/><rect x="495" y="1946" width="10" height="168" rx="5" fill="#0F2A43" opacity=".55"/></g>
-      <circle cx="500" cy="2029" r="9" fill="#B8873B"/>
-    </g>
-    <text class="tag" x="330" y="2066" text-anchor="middle">Fly</text>
-  </g>
-</svg>
-<p class="note">Josie’s Cafe is real; Utila Dives and everything else in the sheets is sample text. Utila is the first stop on the globe.</p>
+<p class="hint" id="hint">Tap the globe to pick where you are going, or walk down the pier to a boat.</p>
+<svg class="scene" id="scene" viewBox="0 0 1000 1500" role="group" aria-label="The Tripwrights sea habitat from above: a helipad, the globe hall, a seaplane jetty and a pier with one adventure boat for each place you can go."></svg>
+<p class="note" id="note">Josie&rsquo;s Cafe is real; Utila Dives and everything else in the sheets is sample text.</p>
 </main>
-
 <div class="veil" id="veil"></div>
 <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="st" aria-hidden="true">
-  <button class="close" id="close" aria-label="Close">×</button>
-  <h2 id="st"></h2>
-  <p class="lede" id="sl"></p>
-  <div id="sb"></div>
+  <button class="close" id="close" aria-label="Close">&times;</button>
+  <h2 id="st"></h2><p class="lede" id="sl"></p><div id="sb"></div>
 </aside>
-
-<script>
-(function(){
-  var B = {m:'Morning', a:'Afternoon', e:'Evening'};
-  function chips(open){ return '<div class="chips">' + ['m','a','e'].map(function(k){
-    return '<span class="chip ' + (open.indexOf(k) > -1 ? 'ok' : 'off') + '">' + B[k] + '</span>'; }).join('') + '</div>'; }
-  function item(n, w, open, extra){ return '<div class="item"><b>' + n + '</b><span class="where">' + w + '</span>' + chips(open) + (extra || '') + '</div>'; }
-  var D = {
-    globe:{t:'The globe', l:'Where do you want to go? Pick an island to see what is open there.', b:
-      item('Utila, Honduras','Live now · reef, cays, quiet town',['m','a','e']) +
-      '<div class="item"><b>Roatán</b><span class="where">Soon</span><div class="chips"><span class="chip soon">Coming</span></div></div>' +
-      '<div class="item"><b>Guanaja</b><span class="where">Soon</span><div class="chips"><span class="chip soon">Coming</span></div></div>' +
-      '<div class="item"><b>Koh Tao, Thailand</b><span class="where">Later</span><div class="chips"><span class="chip soon">Planned</span></div></div>' +
-      '<button class="btn" disabled>Plan Utila (next screen)</button>'},
-    dive:{t:'Dive', l:'Reefs, walls, wrecks, and learning to dive. We check certification so you do not find out at the dock.', b:
-      item('Fun dive, two tanks','Utila Dives · Utila',['m','a']) +
-      item('Discover scuba (no certificate)','Utila Dives · Utila',['m','a']) +
-      item('Night dive','Utila Dives · Utila',['e'])},
-    snow:{t:'Snow & ice', l:'Not on Utila, but this is where cold places will live: skiing, sledding, northern lights.', b:
-      '<div class="item"><b>Arctic and alpine</b><span class="where">Arrives when an island of snow joins the map.</span></div>'},
-    stay:{t:'Stay', l:'A bunk, a room, a cabin. Where you sleep, and when check-in actually is.', b:
-      item('Harbour guesthouse','Sample stay · Utila',['m','a','e']) +
-      item('Hillside cabin','Sample stay · Utila',['a','e'])},
-    eat:{t:'Eat', l:'Breakfast to late supper, open when the shop is open.', b:
-      item('Josie’s Cafe','Coffee · breakfast · lunch · Utila',['m','a']) +
-      item('Dockside supper','Sample · Utila',['e'])},
-    explore:{t:'Explore', l:'Trails, viewpoints, markets. The things you do on foot once you step off the ship.', b:
-      item('Ridge walk to the lookout','Sample guide · Utila',['m']) +
-      item('Town and market stroll','Sample · Utila',['m','a'])},
-    rest:{t:'Rest & spa', l:'Massage, quiet, a long soak. The advice you would get from someone who has done it.', b:
-      item('Shell Spa massage','Sample · Utila',['a','e']) +
-      item('Quiet hour at the bay','Sample · Utila',['m','a'])},
-    sail:{t:'Sail', l:'Tall ships, ferries and day boats.', b:
-      item('Cays day sail','Sample · Utila',['m','a']) +
-      item('Sunset sail','Sample · Utila',['e'])},
-    fly:{t:'Fly', l:'Flights and bubble-helicopter tours when you want the island from above.', b:
-      item('Island loop flight','Sample · Utila',['m','a'])}
-  };
-  var sheet = document.getElementById('sheet'), veil = document.getElementById('veil'), last;
-  function open(k){ var d = D[k]; if(!d) return;
-    document.getElementById('st').textContent = d.t;
-    document.getElementById('sl').textContent = d.l;
-    document.getElementById('sb').innerHTML = d.b;
-    sheet.classList.add('on'); veil.classList.add('on'); sheet.setAttribute('aria-hidden','false');
-    document.getElementById('close').focus(); }
-  function shut(){ sheet.classList.remove('on'); veil.classList.remove('on'); sheet.setAttribute('aria-hidden','true'); if(last) last.focus(); }
-  var objs = document.querySelectorAll('.obj');
-  Array.prototype.forEach.call(objs, function(o){
-    o.addEventListener('click', function(){ last = o; open(o.getAttribute('data-k')); });
-    o.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); last = o; open(o.getAttribute('data-k')); } });
-  });
-  document.getElementById('close').addEventListener('click', shut);
-  veil.addEventListener('click', shut);
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') shut(); });
-})();
-</script>
+<script src="art/palettes.js"></script><script src="art/kit.js"></script><script src="rig.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
