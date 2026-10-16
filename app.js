@@ -18,7 +18,7 @@
   var LADDER = ['none', 'ow', 'aow', 'rescue', 'pro'], LN = { none: 'No card', ow: 'Open Water', aow: 'Advanced', rescue: 'Rescue', pro: 'Divemaster+' };
   var cert = { level: 'none', agency: 'SSI' }; try { cert = JSON.parse(localStorage.getItem('tw-cert')) || cert; } catch (e) { }
   function saveCert() { try { localStorage.setItem('tw-cert', JSON.stringify(cert)); } catch (e) { } }
-  function save() { try { localStorage.setItem('tw-plan', JSON.stringify(plan)); } catch (e) { } $('pn').textContent = plan.length; }
+  function save() { try { localStorage.setItem('tw-plan', JSON.stringify(plan)); } catch (e) { } $('pn').textContent = plan.length; $('vpn').textContent = plan.length; }
   function mins(s) { var a = s.split(':'); return +a[0] * 60 + +a[1]; }
   function clock(s) { var a = s.split(':'), h = +a[0]; return (h % 12 || 12) + (a[1] === '00' ? '' : ':' + a[1]) + (h >= 12 ? 'pm' : 'am'); }
   function openIn(p, d, b) { var v = p.hours[d]; if (v === 'closed') { return false; } var r = v.split('-'); return mins(r[0]) < BLOCK[b][2] && mins(r[1]) > BLOCK[b][1]; }
@@ -125,7 +125,7 @@
     DAY.forEach(function (d) {
       var items = plan.filter(function (x) { return x.day === d; });
       if (!items.length) { return; } any = true; h += '<h3 style="font:800 18px var(--u-display);margin:10px 0 2px">' + DAYL[d] + '</h3>';
-      ['m', 'a', 'e'].forEach(function (b) { items.filter(function (x) { return x.block === b; }).forEach(function (x) { var p = byId[x.id]; h += '<div data-place="' + p.pal + '" class="pcard" style="padding:8px 14px;margin:6px 0"><b>' + p.name + '</b> <span class="where">' + BLOCK[b][0] + '</span></div>'; }); });
+      ['m', 'a', 'e'].forEach(function (b) { items.filter(function (x) { return x.block === b; }).forEach(function (x) { var p = byId[x.id]; h += '<div data-place="' + p.pal + '" class="pcard" style="padding:8px 14px;margin:6px 0"><b>' + p.name + '</b> <span class="where">' + (x.what ? x.what + ' · ' : '') + BLOCK[b][0] + '</span></div>'; }); });
     });
     openSheet('Your plan', any ? 'Saved on this device.' : 'Nothing yet.', any ? h : '<p class="note">Spin the globe, board a yacht, pick something to do.</p><button class="btn" data-globe="1">Open the globe</button>');
   }
@@ -145,6 +145,41 @@
     });
     openSheet('Getting there', 'Flights, buses and ferries in, and back out again.', h);
   }
+
+  /* the front desk at the dive shop: book a room, extend a stay. Each night is an Evening block on your plan. */
+  var DAYORDER = DAY;
+  function stayNights(p) { return plan.filter(function (x) { return x.id === p.id && x.what && x.what.indexOf('Stay') === 0; }); }
+  function staySheet(p) {
+    var room = (p.stay[0] || {}).id, nights = 3, start = day;
+    function body() {
+      var have = stayNights(p), last = have.length ? have[have.length - 1] : null;
+      return (have.length ? '<div class="item" style="background:var(--card)"><b>Your stay</b><span class="where">' + have.map(function (x) { return DAYL[x.day]; }).join(', ') + ' · ' + have[0].what.replace('Stay · ', '') + '</span><button class="btn add" data-extend="1">+ one more night</button></div>' : '') +
+        '<p class="where" style="margin:10px 0 2px"><b>Room</b></p><div class="days">' + p.stay.map(function (r) { return '<button data-room="' + r.id + '" class="' + (r.id === room ? 'on' : '') + '">' + r.name + '</button>'; }).join('') + '</div>' +
+        '<p class="where" style="margin:8px 0 2px"><b>First night</b></p><div class="days">' + DAY.map(function (d) { return '<button data-start="' + d + '" class="' + (d === start ? 'on' : '') + '">' + DAYL[d] + '</button>'; }).join('') + '</div>' +
+        '<p class="where" style="margin:8px 0 2px"><b>Nights</b></p><div class="days">' + [1, 2, 3, 4, 5, 6, 7].map(function (n) { return '<button data-nights="' + n + '" class="' + (n === nights ? 'on' : '') + '">' + n + '</button>'; }).join('') + '</div>' +
+        '<button class="btn" data-book="1">Put it in my plan</button><p class="note">This puts the nights in your plan. The shop confirms the room.</p>';
+    }
+    openSheet('Front desk', p.name + ' · rooms: ' + p.stay.map(function (r) { return r.line; }).join(' '), '<div data-place="' + p.pal + '" class="pcard" id="sc"><div id="scb">' + body() + '</div></div>');
+    $('sc').onclick = function (e) {
+      var t = e.target, g = function (k) { return t.getAttribute(k); }, r = g('data-room'), st = g('data-start'), n = g('data-nights');
+      if (r) { room = r; } if (st) { start = st; } if (n) { nights = +n; }
+      if (g('data-book')) {
+        var rn = p.stay.filter(function (x) { return x.id === room; })[0].name, i0 = DAYORDER.indexOf(start), i;
+        for (i = 0; i < nights; i++) { var dd = DAYORDER[(i0 + i) % 7]; if (!plan.some(function (x) { return x.id === p.id && x.day === dd && x.block === 'e' && x.what && x.what.indexOf('Stay') === 0; })) { plan.push({ id: p.id, day: dd, block: 'e', what: 'Stay · ' + rn }); } }
+        save(); toast('Stay added: ' + nights + (nights === 1 ? ' night' : ' nights') + ' from ' + DAYL[start] + '.');
+      }
+      if (g('data-extend')) {
+        var h = stayNights(p), l = h[h.length - 1], nd = DAYORDER[(DAYORDER.indexOf(l.day) + 1) % 7];
+        if (!plan.some(function (x) { return x.id === p.id && x.day === nd && x.what && x.what.indexOf('Stay') === 0; })) { plan.push({ id: p.id, day: nd, block: 'e', what: l.what }); save(); toast('Extended to ' + DAYL[nd] + '.'); }
+      }
+      if (r || st || n || g('data-book') || g('data-extend')) { $('scb').innerHTML = body(); }
+    };
+  }
+  /* the planning pins inside a place's own page (the dive board, the front desk) talk to us */
+  window.addEventListener('message', function (e) {
+    var m = e.data; if (e.origin !== location.origin || !m || m.tw !== 'paradise') { return; }
+    var p = byId.paradise; if (m.topic === 'dive') { placeSheet(p); } else if (m.topic === 'stay') { staySheet(p); }
+  });
 
   /* ---------- taps ---------- */
   function tap(k, el) {
@@ -178,6 +213,7 @@
   $('brand').addEventListener('click', function () { go('#'); });
   $('planbtn').addEventListener('click', planSheet);
   $('vback').addEventListener('click', function () { if (visiting) { go('#i/' + visiting.island); } });
+  $('vmine').addEventListener('click', planSheet);
   $('vplan').addEventListener('click', function () { if (visiting) { placeSheet(visiting); } });
   $('close').addEventListener('click', shut); veil.addEventListener('click', shut);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (sheet.classList.contains('on')) { shut(); } else if (visiting) { $('vback').click(); } else if ($('globe').classList.contains('on')) { $('gclose').click(); } else { shut(); } } });

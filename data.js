@@ -45,7 +45,8 @@
     utila: [
       { id: 'josies-cafe', name: 'Josie’s Cafe', kind: 'Eat', acts: ['eat'], pal: 'josies-cafe', x: 270, y: 425, real: true, enter: 'https://josiescafe.com/', blurb: 'Coffee, breakfast and lunch on the bay. Order at the counter.',
         hours: { mon: '6:15-14:30', tue: '6:15-14:30', wed: '6:15-14:30', thu: '6:15-14:30', fri: '6:15-14:30', sat: '6:15-14:30', sun: 'closed' } },
-      { id: 'paradise', name: 'Paradise', kind: 'Dive · Stay', acts: ['dive', 'stay', 'water'], pal: 'paradise', x: 740, y: 470, real: true, blurb: 'A stand-in dive shop and hostel on the bay, next to Josie’s (demo). Courses and hours are samples.',
+      { id: 'paradise', name: 'Paradise', kind: 'Dive · Stay', acts: ['dive', 'stay', 'water'], pal: 'paradise', x: 740, y: 470, real: true, enter: 'places/paradise/index.html?embed=1',
+        stay: [{ id: 'dorm', name: 'Dorm bed', line: 'A bunk in a shared dorm with 2 bunks.' }, { id: 'single', name: 'Single room', line: 'Your own small room.' }, { id: 'fulls', name: 'Room with two fulls', line: 'Two full beds, good for friends.' }, { id: 'suite', name: 'Suite', line: 'Two queens, a bathroom and A/C, upstairs.' }], blurb: 'A stand-in dive shop and hostel on the bay, next to Josie’s (demo). Courses and hours are samples.',
         hours: (function () { var o = all('7:00-17:00'); o.sun = '7:00-12:00'; return o; })(),
         offers: [
           { name: 'Try scuba', agencies: ['SSI', 'PADI'], needs: 'none' }, { name: 'Open Water', agencies: ['SSI', 'PADI'], needs: 'none', days: 4 },

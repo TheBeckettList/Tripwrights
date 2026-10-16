@@ -79,6 +79,8 @@ button.item{cursor:pointer}
 .visit{position:fixed;inset:0;z-index:6;background:#FFF6F2;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s;visibility:hidden}
 .visit.on{opacity:1;pointer-events:auto;visibility:visible}
 .vbar{display:flex;align-items:center;gap:8px;padding:max(8px,env(safe-area-inset-top)) 10px 8px;background:var(--paper)}
+.vbar .pill{padding:0 14px}
+@media (max-width:420px){#vbackl{display:none}}
 .vbar .vt{font:800 18px var(--u-display);color:var(--accent-deep);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vbar a.pill{text-decoration:none}
 .visit iframe{flex:1;border:0;width:100%;background:#FFF6F2}
@@ -103,7 +105,7 @@ button.item{cursor:pointer}
 </div>
 
 <div class="visit" id="visit" aria-hidden="true">
-  <div class="vbar"><button class="pill" id="vback">&larr; <span id="vbackl">Back</span></button><span class="vt" id="vtitle"></span><button class="pill plan" id="vplan">+ Plan</button><a class="pill" id="vopen" target="_blank" rel="noopener" aria-label="Open in a new tab">&nearr;</a></div>
+  <div class="vbar"><button class="pill" id="vback">&larr; <span id="vbackl">Back</span></button><span class="vt" id="vtitle"></span><button class="pill plan" id="vplan">+ Plan</button><button class="pill" id="vmine" aria-label="My plan">&#9776; <span id="vpn">0</span></button><a class="pill" id="vopen" target="_blank" rel="noopener" aria-label="Open in a new tab">&nearr;</a></div>
   <iframe id="vframe" title="" loading="lazy" allow="geolocation"></iframe>
 </div>
 <div class="veil" id="veil"></div>
