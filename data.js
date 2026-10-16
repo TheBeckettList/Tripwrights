@@ -18,7 +18,7 @@
 
   TW.REGIONS = {
     caribbean: {
-      name: 'Caribbean', sub: 'Bay Islands, Honduras', lon: -86.4, lat: 16.3, live: true, yacht: 'cat', vessel: 'an explorer catamaran in dazzle stripes',
+      name: 'Caribbean', sub: 'Bay Islands, Honduras', lon: -86.4, lat: 16.3, live: true, yacht: 'cat', vessel: 'an orange and white passenger catamaran, after the Utila ferry',
       c: { accent: '#E9735C', deep: '#B8503B', soft: '#F5B8A8', pale: '#FDEAE4', pop: '#F2B632', tank: '#E9735C', tank2: '#F2F2EE' },
       blurb: 'Reef walls, whale sharks and three islands an hour apart.',
       islands: [

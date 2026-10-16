@@ -29,7 +29,7 @@ Diner Dash.) Everything is a place you tap, drawn from above in Josie's hand wit
 ## Regions now
 | region | islands | yacht | color |
 |---|---|---|---|
-| Caribbean (live) | Utila, Roatán, Guanaja | explorer catamaran in dazzle stripes (after *The Beast*): net and spa pool between the bows, sportfisher on the aft deck | coral `#E9735C` |
+| Caribbean (live) | Utila, Roatán, Guanaja | orange-and-white passenger catamaran, after the Utila ferry (no logos): sundeck bow, saloon with seats and a snack bar, dive gear, dinghy and rods on the stern deck | coral `#E9735C` |
 | Southeast Asia (soon) | Koh Tao, Koh Phangan, Koh Samui | yacht-support ship: plumb bow, superstructure forward, working deck aft with a crane, dive tender, hobie cat and a little yellow sub | violet `#8A6BB8` |
 
 A new region is a `TW.REGIONS` entry in `data.js` (name, lon/lat, colors, islands with map positions). Its yacht is
